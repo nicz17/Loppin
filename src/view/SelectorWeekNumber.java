@@ -19,14 +19,14 @@ import common.view.WidgetsFactory;
  * <li>20.01.2018: nicz - Creation</li>
  * </ul>
  */
-public class WeekNumberSelector extends Composite {
+public class SelectorWeekNumber extends Composite {
 	
 	private int week;
 	private final Spinner spiValue;
 	private final Label lblValue;
 	private final WeekNumberFormat formatter;
 
-	public WeekNumberSelector(Composite parent) {
+	public SelectorWeekNumber(Composite parent) {
 		super(parent, 0);
 		
 		this.formatter = new WeekNumberFormat();

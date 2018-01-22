@@ -14,11 +14,10 @@ import common.view.IsModule;
  */
 public enum Module implements IsModule {
 	
-	PLANTS   (ModulePlants.class.getName(),   "Plantes",   "leaf"),
-    SOILS    (ModuleSoils.class.getName(),    "Sols",      "rocks"),
-    GARDENS  ("ModuleGardens.class.getName()",  "Jardins",   "fence"),
-    JOURNAL  ("ModuleJournal.class.getName()",  "Journal",   "edit")
-    ;
+	PLANTS (ModulePlants.class.getName(),   "Plantes",   "leaf"),
+    SOILS  (ModuleSoils.class.getName(),    "Sols",      "rocks"),
+    GARDENS(ModuleGardens.class.getName(),  "Jardins",   "fence"),
+    JOURNAL(ModuleJournal.class.getName(),  "Journal",   "edit");
 
 	private String moduleClass;
 	private String title;

@@ -30,8 +30,8 @@ public class EditorPlant extends AbstractEditor {
 	private SelectorSoil selSoil;
 	private EnumSelector<Family> selFamily;
 	private EnumSelector<PlantKind> selKind;
-	private WeekNumberSelector selSowing;
-	private WeekNumberSelector selHarvest;
+	private SelectorWeekNumber selSowing;
+	private SelectorWeekNumber selHarvest;
 	
 	private Plant theObject;
 
@@ -82,10 +82,10 @@ public class EditorPlant extends AbstractEditor {
 		selSoil = new SelectorSoil("Plant soil selector", cMain, true, modifListener);
 		
 		widgetsFactory.createLabel(cMain, "Semis");
-		selSowing = new WeekNumberSelector(cMain);
+		selSowing = new SelectorWeekNumber(cMain);
 		
 		widgetsFactory.createLabel(cMain, "Récolte");
-		selHarvest = new WeekNumberSelector(cMain);
+		selHarvest = new SelectorWeekNumber(cMain);
 
 		Controller.getInstance().addDataListener(this);
 	    selSoil.load();

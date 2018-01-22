@@ -1,6 +1,11 @@
 package view;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.TableItem;
 
 import common.base.Logger;
@@ -91,8 +96,35 @@ public class ModuleSoils extends AbstractModule<Soil> {
 		log.info("Done loadData");
 	}
 	
+
+	@Override
+	protected void reloadTable() {
+		super.reloadTable();
+		
+		int iCol = 2;
+		for (int iRow = 0; iRow < vecObjects.size(); iRow++) {
+			TableItem ti = tblData.getItem(iRow);
+			Soil soil = vecObjects.get(iRow);
+			RGB rgb = parseRGBString(soil.getColor());
+			if (rgb != null) {
+				ti.setBackground(iCol, new Color(getDisplay(), rgb));
+			}
+		}
+	}
+	
 	private void showObject(Soil obj) {
 		editor.showObject(obj);
+	}
+	
+	private RGB parseRGBString(String strRGB) {
+		Matcher m = Pattern.compile("RGB \\{(\\d+), (\\d+), (\\d+)\\}").matcher(strRGB);
+		if (m.find()) {
+			int r = Integer.parseInt(m.group(1));
+			int g = Integer.parseInt(m.group(2));
+			int b = Integer.parseInt(m.group(3));
+			return new RGB(r, g, b);
+		}
+		return null;
 	}
 
 }

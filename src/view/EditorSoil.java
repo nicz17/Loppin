@@ -2,6 +2,7 @@ package view;
 
 import model.Soil;
 
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
@@ -21,7 +22,7 @@ public class EditorSoil extends AbstractEditor {
 	
 	private Text txtName;
 	private Text txtDesc;
-	private Text txtColor;
+	private SelectorColor selColor;
 	
 	private Soil theObject;
 
@@ -40,7 +41,7 @@ public class EditorSoil extends AbstractEditor {
 				512, 125, modifListener);
 
 		widgetsFactory.createLabel(cMain, "Couleur");
-		txtColor = widgetsFactory.createText(cMain, 64, modifListener);
+		selColor = new SelectorColor(cMain, new RGB(128, 128, 128), "Choisir une couleur de sol", modifListener);
 
 		Controller.getInstance().addDataListener(this);
 	}
@@ -56,11 +57,11 @@ public class EditorSoil extends AbstractEditor {
 		if (object != null) {
 			txtName.setText(object.getName());
 			txtDesc.setText(object.getDescription() == null ? "" : object.getDescription());
-			txtColor.setText(object.getColor() == null ? "" : object.getColor());
+			selColor.setValue(object.getColor());
 		} else {
 			txtName.setText("");
 			txtDesc.setText("");
-			txtColor.setText("");
+			selColor.setValue(null);
 		}
 		
 		enableWidgets(object != null);
@@ -83,7 +84,7 @@ public class EditorSoil extends AbstractEditor {
 		if (theObject != null) {
 			theObject.setName(txtName.getText());
 			theObject.setDescription(txtDesc.getText());
-			theObject.setColor(txtColor.getText());
+			theObject.setColor(selColor.getValue());
 
 			try {
 				Controller.getInstance().saveSoil(theObject);
@@ -101,7 +102,7 @@ public class EditorSoil extends AbstractEditor {
 		if (theObject == null) return false;
 		if (!txtName.getText().equals(theObject.getName())) return true;
 		if (!txtDesc.getText().equals(theObject.getDescription())) return true;
-		if (!txtColor.getText().equals(theObject.getColor())) return true;
+		if (!selColor.getValue().equals(theObject.getColor())) return true;
 		return false;
 	}
 
