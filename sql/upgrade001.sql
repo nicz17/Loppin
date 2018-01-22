@@ -1,7 +1,7 @@
 -- create first tables: Soil, Plant
 
 -- to open mysql client:
--- mysql -u root -p loppin
+-- mysql -u loppin -p loppin
 
 CREATE TABLE IF NOT EXISTS Soil (
   idxSoil INT(11) NOT NULL AUTO_INCREMENT,
