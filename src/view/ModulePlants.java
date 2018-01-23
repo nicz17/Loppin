@@ -60,7 +60,7 @@ public class ModulePlants extends AbstractModule<Plant> {
 
 	@Override
 	protected void showObjects() {
-		vecObjects = Controller.getInstance().getPlants();
+		vecObjects = Controller.getInstance().getPlants(searchBox.getSearchText());
 		reloadTable();
 	}
 

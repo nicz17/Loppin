@@ -1,5 +1,6 @@
 package view;
 
+import model.Field;
 import model.Soil;
 
 import org.eclipse.swt.graphics.RGB;
@@ -33,8 +34,8 @@ public class EditorSoil extends AbstractEditor {
 	public EditorSoil(Composite parent) {
 		super(parent);
 		
-		widgetsFactory.createLabel(cMain, "Nom");
-		txtName = widgetsFactory.createText(cMain, 64, modifListener);
+		widgetsFactory.createLabel(cMain, Field.SOIL_NAME.getGuiName());
+		txtName = widgetsFactory.createText(cMain, Field.SOIL_NAME.getMax(), modifListener);
 
 		widgetsFactory.createLabel(cMain, "Description", true);
 		txtDesc = widgetsFactory.createMultilineText(cMain, 

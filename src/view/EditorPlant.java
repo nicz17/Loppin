@@ -95,12 +95,7 @@ public class EditorPlant extends AbstractEditor {
 			public void widgetSelected(SelectionEvent e) {
 				if (theObject != null) {
 					String url = "http://fr.wikipedia.org/wiki/" + theObject.getNameLatin();
-//					try {
-						Program.launch(url);
-						//Runtime.getRuntime().exec(new String[] {"google-chrome-stable", url});
-//					} catch (IOException exc) {
-//						MessageBox.error(exc);
-//					}
+					Program.launch(url);
 				}
 			}
 		});

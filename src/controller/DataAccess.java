@@ -76,10 +76,14 @@ public class DataAccess {
 		return vecResult;
 	}
 	
-	protected Vector<Soil> fetchSoils() {
+	protected Vector<Soil> fetchSoils(String where) {
 		Vector<Soil> vecResult = new Vector<>();
 		
 		String query = "SELECT * FROM Soil ";
+		if (where != null && !where.isEmpty()) {
+			query += "WHERE " + where;
+		}
+		query += " ORDER BY soName ASC";
 
 		try {
 			Connection conn = dbTools.getConnection();

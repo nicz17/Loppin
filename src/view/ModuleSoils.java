@@ -44,7 +44,7 @@ public class ModuleSoils extends AbstractModule<Soil> {
 	
 	@Override
 	protected void createObject() {
-		Soil newObj = new Soil(0, "", "", "");
+		Soil newObj = new Soil(0, "", "", "RGB {105, 80, 16}");
 		vecObjects.add(newObj);
 		
 		// show object in table
@@ -63,7 +63,7 @@ public class ModuleSoils extends AbstractModule<Soil> {
 
 	@Override
 	protected void showObjects() {
-		vecObjects = Controller.getInstance().getSoils();
+		vecObjects = Controller.getInstance().getSoils(searchBox.getSearchText());
 		reloadTable();
 	}
 

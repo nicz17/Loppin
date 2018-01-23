@@ -2,6 +2,7 @@ package controller;
 
 import java.util.Vector;
 
+import model.Field;
 import model.Plant;
 import model.Soil;
 
@@ -42,20 +43,29 @@ public class Controller {
 	
 	/**
 	 * Gets the list of Plant objects saved in database.
+	 * @param filter  a text filter (may be null)
 	 * @return the list of Plant objects
 	 */
-	public Vector<Plant> getPlants() {
+	public Vector<Plant> getPlants(String filter) {
 		String where = null;
+		if (filter != null && !filter.isEmpty()) {
+			where = Field.PLANT_NAME.getDbName() + " like '%" + filter + "%' ";
+		}
 		Vector<Plant> vecPlants = DataAccess.getInstance().fetchPlants(where);
 		return vecPlants;
 	}
 	
 	/**
 	 * Gets the list of Soil objects saved in database.
+	 * @param filter  a text filter (may be null)
 	 * @return the list of Soil objects
 	 */
-	public Vector<Soil> getSoils() {
-		Vector<Soil> vecSoils = DataAccess.getInstance().fetchSoils();
+	public Vector<Soil> getSoils(String filter) {
+		String where = null;
+		if (filter != null && !filter.isEmpty()) {
+			where = Field.SOIL_NAME.getDbName() + " like '%" + filter + "%' ";
+		}
+		Vector<Soil> vecSoils = DataAccess.getInstance().fetchSoils(where);
 		return vecSoils;
 	}
 
@@ -132,7 +142,7 @@ public class Controller {
 	public void notifyDataListeners(final DatabaseTools.UpdateType updateType, final int idx) {
 		if (vecDataListeners == null) return;
 
-		log.info("notifying " + vecDataListeners.size() + 
+		log.info("Notifying " + vecDataListeners.size() + 
 				" data listeners of update in " + updateType);
 		for (DataListener li : vecDataListeners) {
 			switch(updateType) {
@@ -151,18 +161,18 @@ public class Controller {
 	}
 	
 	/**
+	 * Reloads all caches.
+	 */
+	public void reloadCaches() {
+		CacheSoil.getInstance().loadAll();
+	}
+	
+	/**
 	 * Clears and closes everything.
 	 */
 	public void terminate() {
 		DataAccess.getInstance().terminate();
 		log.info("Au revoir !");
-	}
-	
-	/**
-	 * Reloads all caches.
-	 */
-	private void reloadCaches() {
-		CacheSoil.getInstance().loadAll();
 	}
 	
 	/**

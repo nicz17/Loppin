@@ -47,7 +47,7 @@ public class CacheSoil {
 	 */
 	public void loadAll() {
 		clear();
-		Vector<Soil> soils = DataAccess.getInstance().fetchSoils();
+		Vector<Soil> soils = DataAccess.getInstance().fetchSoils(null);
 		log.info("Loaded " + soils.size() + " soils");
 		
 		for (Soil soil : soils) {
@@ -65,12 +65,15 @@ public class CacheSoil {
 	 * @param idxSoil  the index of the soil to refresh.
 	 */
 	public void refresh(int idxSoil) {
-		// TODO DB fetch by id
-//		if (idxSoil > 0) {
-//			Soil soil = DataAccess.getInstance().getSoil(idxSoil);
-//			log.info("Refreshing cache for " + soil);
-//			addSoil(soil);
-//		}
+		if (idxSoil > 0) {
+			String where = "idxSoil = " + idxSoil;
+			Vector<Soil> soils = DataAccess.getInstance().fetchSoils(where);
+			if (soils != null && !soils.isEmpty()) {
+				Soil soil = soils.firstElement();
+				log.info("Refreshing cache for " + soil);
+				addSoil(soil);
+			}
+		}
 	}
 
 	/**
