@@ -7,6 +7,9 @@ import model.Family;
 import model.Plant;
 import model.PlantKind;
 
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
@@ -86,6 +89,21 @@ public class EditorPlant extends AbstractEditor {
 		
 		widgetsFactory.createLabel(cMain, "Récolte");
 		selHarvest = new SelectorWeekNumber(cMain);
+		
+		widgetsFactory.createLink(cButtons, "<a>Wikipedia</a>", "Voir cette plante dans Wikipedia", new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				if (theObject != null) {
+					String url = "http://fr.wikipedia.org/wiki/" + theObject.getNameLatin();
+//					try {
+						Program.launch(url);
+						//Runtime.getRuntime().exec(new String[] {"google-chrome-stable", url});
+//					} catch (IOException exc) {
+//						MessageBox.error(exc);
+//					}
+				}
+			}
+		});
 
 		Controller.getInstance().addDataListener(this);
 	    selSoil.load();
