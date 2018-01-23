@@ -12,16 +12,16 @@ package model;
  */
 public enum Field {
 	
-	PLANT_NAME  ("plName", "Nom", 100, 64),
-	PLANT_LATIN ("plNameLatin", "Nom latin", 100, 64),
-	PLANT_DESC  ("plDescription", "Description", 200, 512),
-	PLANT_FAMILY("plFamily", "Famille", 64, 100),
-	PLANT_KIND  ("plKind", "Type", 10, 100),
-	PLANT_SOIL  ("plSoil", "Sol", 64, 100),
+	PLANT_NAME  ("plName", "Nom", 150, 64),
+	PLANT_LATIN ("plNameLatin", "Nom latin", 150, 64),
+	PLANT_DESC  ("plDescription", "Description", 250, 512),
+	PLANT_FAMILY("plFamily", "Famille", 150, 64),
+	PLANT_KIND  ("plKind", "Type", 150, 10),
+	PLANT_SOIL  ("plSoil", "Sol", 150, 64),
 	
-	SOIL_NAME ("soName", "Nom", 100, 64),
-	SOIL_DESC ("soDescription", "Description", 200, 512),
-	SOIL_COLOR("soColor", "Couleur", 50, 64);
+	SOIL_NAME ("soName", "Nom", 150, 64),
+	SOIL_DESC ("soDescription", "Description", 250, 512),
+	SOIL_COLOR("soColor", "Couleur", 100, 64);
 	
 	private String dbName;
 	private String guiName;

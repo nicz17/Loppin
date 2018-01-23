@@ -3,6 +3,7 @@ package view;
 import java.util.Vector;
 
 import model.DataObject;
+import model.Field;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -147,6 +148,21 @@ public abstract class AbstractModule<T extends DataObject> extends TabbedModule 
 		reselectObject();
 	}
 	
+	protected void initTable(Field[] fields) {
+		for (Field field : fields) {
+			TableColumn column = new TableColumn(tblData, SWT.NONE);
+			column.setText(field.getGuiName());
+			column.setWidth(field.getWidth());
+			column.addSelectionListener(new SelectionAdapter() {
+				public void widgetSelected(SelectionEvent e) {
+					//orderByColumn(col);
+					// TODO orderByColumn(field);
+				}
+			});
+		}
+	}
+	
+	@Deprecated
 	protected void initTable(String[] tableHead, double[] colWidths) {
 		for (int i=0; i<colWidths.length; i++) {
 			TableColumn column = new TableColumn(tblData, SWT.NONE);

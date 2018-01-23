@@ -8,6 +8,7 @@ import common.view.IncrementalSearchBox;
 
 import controller.Controller;
 import model.Family;
+import model.Field;
 import model.Plant;
 import model.PlantKind;
 
@@ -66,8 +67,8 @@ public class ModulePlants extends AbstractModule<Plant> {
 
 	@Override
 	protected void loadWidgets() {
-		initTable(new String[] {"Nom", "Nom latin", "Description", "Famille", "Type"}, 
-				  new double[] {0.20, 0.20, 0.40, 0.20, 0.20} );
+		initTable(new Field[] {Field.PLANT_NAME,   Field.PLANT_LATIN, Field.PLANT_DESC, 
+							   Field.PLANT_FAMILY, Field.PLANT_KIND});
 		
 	    editor = new EditorPlant(cRight);
 	    
