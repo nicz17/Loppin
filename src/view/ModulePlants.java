@@ -1,16 +1,14 @@
 package view;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.TableItem;
+import model.Family;
+import model.Field;
+import model.Plant;
+import model.PlantKind;
 
 import common.base.Logger;
 import common.view.IncrementalSearchBox;
 
 import controller.Controller;
-import model.Family;
-import model.Field;
-import model.Plant;
-import model.PlantKind;
 
 
 /**
@@ -46,9 +44,11 @@ public class ModulePlants extends AbstractModule<Plant> {
 		vecObjects.add(newObj);
 		
 		// show object in table
-		TableItem item = new TableItem(tblData, SWT.NONE);
-		item.setText(newObj.getDataRow());
-		tblData.setSelection(item);
+//		TableItem item = new TableItem(tblData, SWT.NONE);
+//		item.setText(newObj.getDataRow());
+//		tblData.setSelection(item);
+		setSelectedObject(0);
+		reloadTable();
 		
 		// show object in editor
 		showObject(newObj);
@@ -68,7 +68,7 @@ public class ModulePlants extends AbstractModule<Plant> {
 	@Override
 	protected void loadWidgets() {
 		initTable(new Field[] {Field.PLANT_NAME,   Field.PLANT_LATIN, Field.PLANT_DESC, 
-							   Field.PLANT_FAMILY, Field.PLANT_KIND});
+							   Field.PLANT_FAMILY, Field.PLANT_KIND,  Field.PLANT_SOIL});
 		
 	    editor = new EditorPlant(cRight);
 	    

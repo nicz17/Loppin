@@ -141,10 +141,35 @@ public class Plant extends DataObject implements Comparable<Plant> {
 	}
 
 	@Override
-	public String[] getDataRow() {
-		return new String[] {
-			getName(), getNameLatin(), getDescription(), getFamily().getGuiName(), getKind().getGuiName()
-		};
+	public String getValue(Field field) {
+		String value = null;
+		switch(field) {
+		case PLANT_DESC:
+			value = (getDescription() == null ? "" : getDescription());
+			break;
+		case PLANT_NAME:
+			value = getName();
+			break;
+		case PLANT_FAMILY:
+			value = getFamily().getGuiName();
+			break;
+		case PLANT_KIND:
+			value = getKind().getGuiName();
+			break;
+		case PLANT_LATIN:
+			value = getNameLatin();
+			break;
+		case PLANT_SOIL:
+			if (soil != null) {
+				value = soil.getName();
+			} else {
+				value = "";
+			}
+			break;
+		default:
+			break;
+		}
+		return value;
 	}
 	
 	@Override

@@ -61,10 +61,22 @@ public class Soil extends DataObject implements Comparable<Soil> {
 	}
 
 	@Override
-	public String[] getDataRow() {
-		return new String[] {
-				getName(), getDescription(), getColor()
-		};
+	public String getValue(Field field) {
+		String value = null;
+		switch(field) {
+		case SOIL_COLOR:
+			value = getColor();
+			break;
+		case SOIL_DESC:
+			value = getDescription();
+			break;
+		case SOIL_NAME:
+			value = getName();
+			break;
+		default:
+			break;
+		}
+		return value;
 	}
 	
 	@Override

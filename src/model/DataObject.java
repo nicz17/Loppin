@@ -18,9 +18,10 @@ public abstract class DataObject {
 	public abstract int getIdx();
 	
 	/**
-	 * Describes how the object should be displayed in tables.
-	 * @return a list of data to display in tables
+	 * Gets a textual value for the specified field.
+	 * @param field  the database field
+	 * @return a textual representation of the field value
 	 */
-	public abstract String[] getDataRow();
+	public abstract String getValue(Field field);
 	
 }

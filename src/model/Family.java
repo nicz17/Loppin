@@ -20,6 +20,8 @@ public enum Family {
 	FABACEAE,
 	LAMIACEAE,
 	POACEAE,
+	ROSACEAE,
+	SOLANACEAE,
 	OTHER;
 	
 	/**

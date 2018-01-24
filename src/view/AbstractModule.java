@@ -31,6 +31,7 @@ import common.view.SearchBox;
  * <p><b>Modifications:</b>
  * <ul>
  * <li>14.01.2018: nicz - Creation</li>
+ * <li>24.01.2018: nicz - Configure table columns using Fields</li>
  * </ul>
  *
  * @param <T> the type of objects displayed in this module.
@@ -48,15 +49,14 @@ public abstract class AbstractModule<T extends DataObject> extends TabbedModule 
 	protected int selCol;
 	//protected DatabaseTools.eOrdering eOrder[] = {};
 	
+	/** the table columns */
+	protected Vector<Field> vecColumns;
+	
 	/** the objects displayed in the table */
 	protected Vector<T> vecObjects;
 	
 	/** ID of the currently selected object */
 	protected Integer selIdx;
-	
-	/** A visitor that can be used to customize created objects */
-//	protected final CreationVisitor creationVisitor =
-//		new CreationVisitor();
 	
 
 	/**
@@ -73,6 +73,8 @@ public abstract class AbstractModule<T extends DataObject> extends TabbedModule 
 	 */
 	public AbstractModule(int nCols) {
 		super();
+		
+		this.vecColumns = new Vector<>();
 		
 		GridLayout gl =  new GridLayout(nCols, false);
 		this.setLayout(gl);
@@ -149,7 +151,9 @@ public abstract class AbstractModule<T extends DataObject> extends TabbedModule 
 	}
 	
 	protected void initTable(Field[] fields) {
+		vecColumns.clear();
 		for (Field field : fields) {
+			vecColumns.add(field);
 			TableColumn column = new TableColumn(tblData, SWT.NONE);
 			column.setText(field.getGuiName());
 			column.setWidth(field.getWidth());
@@ -162,26 +166,17 @@ public abstract class AbstractModule<T extends DataObject> extends TabbedModule 
 		}
 	}
 	
-	@Deprecated
-	protected void initTable(String[] tableHead, double[] colWidths) {
-		for (int i=0; i<colWidths.length; i++) {
-			TableColumn column = new TableColumn(tblData, SWT.NONE);
-			final int col = i;
-			column.setText(tableHead[i]);
-			column.setWidth( (int)(tblWidth*colWidths[i]) );
-			column.addSelectionListener(new SelectionAdapter() {
-				public void widgetSelected(SelectionEvent e) {
-					orderByColumn(col);
-				}
-			});
-		}
-	}
-	
 	protected void reloadTable() {
 		tblData.removeAll();
 		for (T obj : vecObjects) {
 			TableItem item = new TableItem(tblData, SWT.NONE);
-			item.setText(obj.getDataRow());
+			for (int iCol = 0; iCol < vecColumns.size(); ++iCol) {
+				String value = obj.getValue(vecColumns.get(iCol));
+				if (value == null) {
+					value = "<Erreur!>";
+				}
+				item.setText(iCol, value);
+			}
 		}
 		reselectObject();
 	}
@@ -221,7 +216,8 @@ public abstract class AbstractModule<T extends DataObject> extends TabbedModule 
 	 * @param idx database index of the object to select
 	 */
 	protected void setSelectedObject(int idx) {
-		if (idx > 0) selIdx = idx;
+		//if (idx > 0) selIdx = idx;
+		selIdx = idx;
 	}
 	
 	/**

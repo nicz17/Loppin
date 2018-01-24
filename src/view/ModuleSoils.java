@@ -3,7 +3,9 @@ package view;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.eclipse.swt.SWT;
+import model.Field;
+import model.Soil;
+
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.TableItem;
@@ -12,7 +14,6 @@ import common.base.Logger;
 import common.view.IncrementalSearchBox;
 
 import controller.Controller;
-import model.Soil;
 
 
 /**
@@ -48,9 +49,8 @@ public class ModuleSoils extends AbstractModule<Soil> {
 		vecObjects.add(newObj);
 		
 		// show object in table
-		TableItem item = new TableItem(tblData, SWT.NONE);
-		item.setText(newObj.getDataRow());
-		tblData.setSelection(item);
+		setSelectedObject(0);
+		reloadTable();
 		
 		// show object in editor
 		showObject(newObj);
@@ -69,8 +69,7 @@ public class ModuleSoils extends AbstractModule<Soil> {
 
 	@Override
 	protected void loadWidgets() {
-		initTable(new String[] {"Nom", "Description", "Couleur"}, 
-				  new double[] {0.30, 0.40, 0.30} );
+		initTable(new Field[] {Field.SOIL_NAME,   Field.SOIL_DESC, Field.SOIL_COLOR});
 		
 	    editor = new EditorSoil(cRight);
 	    
