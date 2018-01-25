@@ -184,9 +184,10 @@ public class EditorPlant extends AbstractEditor {
 
 	@Override
 	protected void deleteObject() {
-		if (MessageBox.askYesNo("Effacer la plante " + theObject.getName() + " ?")) {
+		if (MessageBox.askYesNo("Voulez-vous vraiment effacer la plante\n" + theObject.getName() + " ?")) {
 			try {
 				Controller.getInstance().deletePlant(theObject);
+				reset();
 			} catch (Exception exc) {
 				MessageBox.error(exc);
 			}

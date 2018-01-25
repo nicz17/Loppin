@@ -52,8 +52,10 @@ public abstract class Validator<T extends DataObject> {
 	protected void checkDependencies(T obj) throws ValidationException {
 		Vector<DataObject> vecDeps = Controller.getInstance().getDependencies(obj);
 		if (vecDeps != null && !vecDeps.isEmpty()) {
-			String sError = "Impossible d'effacer " + obj.getName() + 
-					", car il est référencé par les objets suivants:\n\n";
+			String sError = "Impossible d'effacer " + obj.getName() + "\n" +
+					"car il est utilisé par les objets suivants:\n\n";
+			
+			// TODO (nicz, 01.2018) don't display more than 6 items (display number of skipped items)
 			for (DataObject dep : vecDeps) {
 				sError += dep.getName() + "\n";
 			}

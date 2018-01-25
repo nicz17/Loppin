@@ -109,9 +109,10 @@ public class EditorSoil extends AbstractEditor {
 
 	@Override
 	protected void deleteObject() {
-		if (MessageBox.askYesNo("Effacer le sol " + theObject.getName() + " ?")) {
+		if (MessageBox.askYesNo("Voulez-vous vraiment effacer le sol\n" + theObject.getName() + " ?")) {
 			try {
 				Controller.getInstance().deleteSoil(theObject);
+				reset();
 			} catch (Exception exc) {
 				MessageBox.error(exc);
 			}
