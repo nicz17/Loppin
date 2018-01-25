@@ -6,6 +6,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 
 import common.view.MessageBox;
+import controller.Controller;
 
 
 /**
@@ -34,14 +35,7 @@ public class ModuleJournal extends TabbedModule {
 		widgetsFactory.createPushButton(this, "A propos de Loppin", "idea", null, false, new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				String sAbout = "A propos de Loppin\n\n" +
-						"Loppin est un Outil de Planification de Potager INformatique.\n\n" +
-						"Version " + Loppin.getInstance().getAppVersion() + "\n\n" +
-						"Conception : Gilles Descloux\n" +
-						"Réalisation : Nicolas Zwahlen\n\n" +
-						"https://github.com/nicz17/Loppin\n\n" +
-						"Copyright (c) 2018 G. Descloux, N. Zwahlen";
-				MessageBox.info("A propos", sAbout);
+				MessageBox.info("A propos", Controller.getInstance().getCredits());
 			}
 		});
 	}

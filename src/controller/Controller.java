@@ -2,6 +2,8 @@ package controller;
 
 import java.util.Vector;
 
+import view.Loppin;
+
 import model.Field;
 import model.Plant;
 import model.Soil;
@@ -165,6 +167,21 @@ public class Controller {
 	 */
 	public void reloadCaches() {
 		CacheSoil.getInstance().loadAll();
+	}
+	
+	/**
+	 * Gets the credits displayed in the About dialog.
+	 * @return the program credits
+	 */
+	public String getCredits() {
+		String sCredits = "A propos de Loppin\n\n" +
+			"Loppin est un Outil de Planification de Potager INformatique.\n\n" +
+			"Version " + Loppin.getInstance().getAppVersion() + "\n\n" +
+			"Conception : Gilles Descloux\n" +
+			"Réalisation : Nicolas Zwahlen\n\n" +
+			"https://github.com/nicz17/Loppin\n\n" +
+			"Copyright (c) 2018 G. Descloux, N. Zwahlen";
+		return sCredits;
 	}
 	
 	/**

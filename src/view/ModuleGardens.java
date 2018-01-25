@@ -1,7 +1,12 @@
 package view;
 
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+
+import common.view.MessageBox;
+import controller.Controller;
 
 
 /**
@@ -27,6 +32,12 @@ public class ModuleGardens extends TabbedModule {
 		this.setLayoutData(new GridData());
 		
 		widgetsFactory.createLabel(this, "Ce module n'est pas encore implémenté !");
+		widgetsFactory.createPushButton(this, "A propos de Loppin", "idea", null, false, new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				MessageBox.info("A propos", Controller.getInstance().getCredits());
+			}
+		});
 	}
 
 	@Override

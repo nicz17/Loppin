@@ -42,7 +42,7 @@ public class Loppin extends AbstractMain {
 	 * The application version. 
 	 * Only increment before exporting a new jar.
 	 */
-	private static final String appVersion = "1.0.0";
+	private static final String appVersion = "1.0.0 Dev";
 
 	public static final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.LONG, Locale.FRANCE);
 

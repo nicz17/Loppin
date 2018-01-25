@@ -69,7 +69,7 @@ public class ModuleSoils extends AbstractModule<Soil> {
 
 	@Override
 	protected void loadWidgets() {
-		initTable(new Field[] {Field.SOIL_NAME,   Field.SOIL_DESC, Field.SOIL_COLOR});
+		initTable(new Field[] {Field.SOIL_NAME, Field.SOIL_DESC, Field.SOIL_COLOR});
 		
 	    editor = new EditorSoil(cRight);
 	    
