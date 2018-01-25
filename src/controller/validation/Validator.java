@@ -1,7 +1,10 @@
 package controller.validation;
 
+import java.util.Vector;
+
 import common.base.Logger;
 import common.exceptions.ValidationException;
+import controller.Controller;
 
 import model.DataObject;
 
@@ -15,6 +18,7 @@ import model.DataObject;
  * <p><b>Modifications:</b>
  * <ul>
  * <li>15.01.2018: nicz - Creation</li>
+ * <li>25.01.2018: nicz - Added method to check for dependencies</li>
  * </ul>
  */
 public abstract class Validator<T extends DataObject> {
@@ -36,6 +40,26 @@ public abstract class Validator<T extends DataObject> {
 	 * @throws ValidationException  if it is invalid to delete object
 	 */
 	public abstract void validateDelete(T obj) throws ValidationException;
+	
+	/**
+	 * Checks if the specified object has dependencies in database.
+	 * If there are dependencies, throws a validation exception with 
+	 * the names of these dependencies.
+	 * Used for checking if the object can be deleted.
+	 * @param obj  the object to delete
+	 * @throws ValidationException
+	 */
+	protected void checkDependencies(T obj) throws ValidationException {
+		Vector<DataObject> vecDeps = Controller.getInstance().getDependencies(obj);
+		if (vecDeps != null && !vecDeps.isEmpty()) {
+			String sError = "Impossible d'effacer " + obj.getName() + 
+					", car il est référencé par les objets suivants:\n\n";
+			for (DataObject dep : vecDeps) {
+				sError += dep.getName() + "\n";
+			}
+			onError(sError);
+		}
+	}
 
 	/**
 	 * Writes an error message to log and throws a {@link ValidationException}

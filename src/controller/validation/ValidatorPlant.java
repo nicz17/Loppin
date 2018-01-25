@@ -45,7 +45,8 @@ public class ValidatorPlant extends Validator<Plant> {
 
 	@Override
 	public void validateDelete(Plant obj) throws ValidationException {
-		onError("Impossible d'effacer une plante !");
+		checkDependencies(obj);
+		//onError("Impossible d'effacer une plante !");
 	}
 
 }

@@ -52,6 +52,7 @@ public class Plant extends DataObject implements Comparable<Plant> {
 		return idx;
 	}
 	
+	@Override
 	public String getName() {
 		return name;
 	}

@@ -4,6 +4,7 @@ import java.util.Vector;
 
 import view.Loppin;
 
+import model.DataObject;
 import model.Field;
 import model.Plant;
 import model.Soil;
@@ -133,6 +134,31 @@ public class Controller {
 	public void addDataListener(DataListener listener) {
 		vecDataListeners.add(listener);
 		log.info("Registered data listeners: " + vecDataListeners.size());
+	}
+	
+	/**
+	 * Get the list of objects referencing the specified object in database.
+	 * Used to check if the object can be deleted.
+	 * @param obj  the object to get dependencies for
+	 * @return  the list of objects referencing the object
+	 */
+	public Vector<DataObject> getDependencies(DataObject obj) {
+		Vector<DataObject> vecDeps = new Vector<>();
+		
+		if (obj == null) {
+			return vecDeps;
+		} else if (obj instanceof Plant) {
+			// No dependencies yet
+			// TODO add dependencies to Culture
+		} else if (obj instanceof Soil) {
+			// Add dependencies to Plant
+			String where = "plSoil = " + obj.getIdx();
+			vecDeps.addAll(DataAccess.getInstance().fetchPlants(where));
+		} else {
+			log.error("Unhandled DataObject " + obj);
+		}
+		
+		return vecDeps;
 	}
 	
 	/**

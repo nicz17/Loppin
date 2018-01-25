@@ -36,6 +36,7 @@ public class Soil extends DataObject implements Comparable<Soil> {
 		return idx;
 	}
 	
+	@Override
 	public String getName() {
 		return name;
 	}

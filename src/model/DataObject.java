@@ -18,6 +18,13 @@ public abstract class DataObject {
 	public abstract int getIdx();
 	
 	/**
+	 * Gets the name of the object, or a compact textual representation
+	 * equivalent to a name.
+	 * @return the object name
+	 */
+	public abstract String getName();
+	
+	/**
 	 * Gets a textual value for the specified field.
 	 * @param field  the database field
 	 * @return a textual representation of the field value

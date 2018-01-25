@@ -28,7 +28,9 @@ public class ValidatorSoil extends Validator<Soil> {
 
 	@Override
 	public void validateDelete(Soil obj) throws ValidationException {
-		onError("Impossible d'effacer un sol !");
+		checkDependencies(obj);
+		//onError("Impossible d'effacer un sol !");
 	}
+	
 
 }
