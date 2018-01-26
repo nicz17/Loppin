@@ -41,10 +41,10 @@ public class Plant extends DataObject implements Comparable<Plant> {
 		this.kind = kind;
 		this.family = family;
 		this.soil = soil;
-		this.dateHarvest1 = 0;
-		this.dateHarvest2 = 0;
-		this.datePlanting = 0;
-		this.dateSowing = 0;
+		this.dateSowing   = 10;
+		this.datePlanting = 16;
+		this.dateHarvest1 = 23;
+		this.dateHarvest2 = 30;
 	}
 
 	@Override
