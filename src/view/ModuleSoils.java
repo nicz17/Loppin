@@ -63,7 +63,7 @@ public class ModuleSoils extends AbstractModule<Soil> {
 
 	@Override
 	protected void showObjects() {
-		vecObjects = Controller.getInstance().getSoils(searchBox.getSearchText());
+		vecObjects = Controller.getInstance().getSoils(searchBox.getSearchText(), ordering);
 		reloadTable();
 	}
 

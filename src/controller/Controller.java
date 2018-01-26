@@ -6,6 +6,7 @@ import view.Loppin;
 
 import model.DataObject;
 import model.Field;
+import model.Ordering;
 import model.Plant;
 import model.Soil;
 
@@ -47,28 +48,30 @@ public class Controller {
 	/**
 	 * Gets the list of Plant objects saved in database.
 	 * @param filter  a text filter (may be null)
+	 * @param ordering  optional sorting object. May be null.
 	 * @return the list of Plant objects
 	 */
-	public Vector<Plant> getPlants(String filter) {
+	public Vector<Plant> getPlants(String filter, Ordering ordering) {
 		String where = null;
 		if (filter != null && !filter.isEmpty()) {
 			where = Field.PLANT_NAME.getDbName() + " like '%" + filter + "%' ";
 		}
-		Vector<Plant> vecPlants = DataAccess.getInstance().fetchPlants(where);
+		Vector<Plant> vecPlants = DataAccess.getInstance().fetchPlants(where, ordering);
 		return vecPlants;
 	}
 	
 	/**
 	 * Gets the list of Soil objects saved in database.
 	 * @param filter  a text filter (may be null)
+	 * @param ordering  optional sorting object. May be null.
 	 * @return the list of Soil objects
 	 */
-	public Vector<Soil> getSoils(String filter) {
+	public Vector<Soil> getSoils(String filter, Ordering ordering) {
 		String where = null;
 		if (filter != null && !filter.isEmpty()) {
 			where = Field.SOIL_NAME.getDbName() + " like '%" + filter + "%' ";
 		}
-		Vector<Soil> vecSoils = DataAccess.getInstance().fetchSoils(where);
+		Vector<Soil> vecSoils = DataAccess.getInstance().fetchSoils(where, ordering);
 		return vecSoils;
 	}
 
@@ -149,11 +152,11 @@ public class Controller {
 			return vecDeps;
 		} else if (obj instanceof Plant) {
 			// No dependencies yet
-			// TODO add dependencies to Culture
+			// TODO Add dependencies to Culture
 		} else if (obj instanceof Soil) {
 			// Add dependencies to Plant
 			String where = "plSoil = " + obj.getIdx();
-			vecDeps.addAll(DataAccess.getInstance().fetchPlants(where));
+			vecDeps.addAll(DataAccess.getInstance().fetchPlants(where, null));
 		} else {
 			log.error("Unhandled DataObject " + obj);
 		}

@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
+import model.Field;
+import model.Ordering;
 import model.Plant;
 import model.Soil;
 import common.base.Logger;
@@ -47,17 +49,21 @@ public class DataAccess {
 	/**
 	 * Fetches Plant objects from database.
 	 * @param where  optional SQL where clause (without where keyword). May be null.
+	 * @param ordering  optional sorting object. May be null.
 	 * @return  the fetched Plant objects.
 	 */
-	protected Vector<Plant> fetchPlants(String where) {
+	protected Vector<Plant> fetchPlants(String where, Ordering ordering) {
 		Vector<Plant> vecResult = new Vector<>();
 		
 		String query = "SELECT * FROM Plant ";
 		if (where != null && !where.isEmpty()) {
 			query += "WHERE " + where;
 		}
-		query += " ORDER BY plName ASC";
-
+		if (ordering == null) {
+			ordering = new Ordering(Field.PLANT_NAME, true);
+		}
+		query += ordering.getOrderClause();
+		
 		try {
 			Connection conn = dbTools.getConnection();
 			Statement stmt = conn.createStatement();
@@ -76,14 +82,23 @@ public class DataAccess {
 		return vecResult;
 	}
 	
-	protected Vector<Soil> fetchSoils(String where) {
+	/**
+	 * Fetches Soil objects from database.
+	 * @param where  optional SQL where clause (without where keyword). May be null.
+	 * @param ordering  optional sorting object. May be null.
+	 * @return  the fetched Soil objects.
+	 */
+	protected Vector<Soil> fetchSoils(String where, Ordering ordering) {
 		Vector<Soil> vecResult = new Vector<>();
 		
 		String query = "SELECT * FROM Soil ";
 		if (where != null && !where.isEmpty()) {
 			query += "WHERE " + where;
 		}
-		query += " ORDER BY soName ASC";
+		if (ordering == null) {
+			ordering = new Ordering(Field.SOIL_NAME, true);
+		}
+		query += ordering.getOrderClause();
 
 		try {
 			Connection conn = dbTools.getConnection();

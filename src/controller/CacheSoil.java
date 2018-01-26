@@ -47,7 +47,7 @@ public class CacheSoil {
 	 */
 	public void loadAll() {
 		clear();
-		Vector<Soil> soils = DataAccess.getInstance().fetchSoils(null);
+		Vector<Soil> soils = DataAccess.getInstance().fetchSoils(null, null);
 		log.info("Loaded " + soils.size() + " soils");
 		
 		for (Soil soil : soils) {
@@ -67,7 +67,7 @@ public class CacheSoil {
 	public void refresh(int idxSoil) {
 		if (idxSoil > 0) {
 			String where = "idxSoil = " + idxSoil;
-			Vector<Soil> soils = DataAccess.getInstance().fetchSoils(where);
+			Vector<Soil> soils = DataAccess.getInstance().fetchSoils(where, null);
 			if (soils != null && !soils.isEmpty()) {
 				Soil soil = soils.firstElement();
 				log.info("Refreshing cache for " + soil);

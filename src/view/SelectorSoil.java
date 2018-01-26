@@ -26,7 +26,7 @@ public class SelectorSoil extends AbstractSelector<Soil> {
 
 	@Override
 	protected Vector<Soil> getData() {
-		Vector<Soil> data = Controller.getInstance().getSoils(null);
+		Vector<Soil> data = Controller.getInstance().getSoils(null, null);
 		return data;
 	}
 

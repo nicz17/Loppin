@@ -4,6 +4,7 @@ import java.util.Vector;
 
 import model.DataObject;
 import model.Field;
+import model.Ordering;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -47,7 +48,7 @@ public abstract class AbstractModule<T extends DataObject> extends TabbedModule 
 	protected Label lblStatus;
 	protected SearchBox searchBox = null;
 	protected int selCol;
-	//protected DatabaseTools.eOrdering eOrder[] = {};
+	protected Ordering ordering;
 	
 	/** the table columns */
 	protected Vector<Field> vecColumns;
@@ -75,6 +76,7 @@ public abstract class AbstractModule<T extends DataObject> extends TabbedModule 
 		super();
 		
 		this.vecColumns = new Vector<>();
+		this.ordering = null;
 		
 		GridLayout gl =  new GridLayout(nCols, false);
 		this.setLayout(gl);
@@ -150,20 +152,32 @@ public abstract class AbstractModule<T extends DataObject> extends TabbedModule 
 		reselectObject();
 	}
 	
+	/**
+	 * Initializes the table with one column for each specified field.
+	 * @param fields  the database fields to display as table columns
+	 */
 	protected void initTable(Field[] fields) {
+		// Clear table columns
 		vecColumns.clear();
+		
+		// Set table columns from fields
 		for (Field field : fields) {
 			vecColumns.add(field);
 			TableColumn column = new TableColumn(tblData, SWT.NONE);
 			column.setText(field.getGuiName());
 			column.setWidth(field.getWidth());
+			column.setData(field);
 			column.addSelectionListener(new SelectionAdapter() {
 				public void widgetSelected(SelectionEvent e) {
-					//orderByColumn(col);
-					// TODO orderByColumn(field);
+					TableColumn column = (TableColumn)e.widget;
+					onSorting(column);
 				}
 			});
 		}
+		
+		// Set initial table sorting
+		tblData.setSortColumn(tblData.getColumn(0));
+		tblData.setSortDirection(SWT.UP);
 	}
 	
 	protected void reloadTable() {
@@ -183,13 +197,22 @@ public abstract class AbstractModule<T extends DataObject> extends TabbedModule 
 	
 	protected abstract void onTableSelection(T obj);
 	
-	protected void orderByColumn(int col) {
-		//MessageBox.debug("Selected column " + col);
-		if (col == selCol) return;
-		//if (col >= eOrder.length) return;
-		selCol = col;
-		tblData.setSortColumn(tblData.getColumn(col));
-		tblData.setSortDirection(SWT.DOWN);
+	/**
+	 * Called when a table column was selected
+	 * (by clicking in the table header).
+	 * Sets the table sorting state.
+	 * @param column  the column that was clicked.
+	 */
+	protected void onSorting(TableColumn column) {
+		boolean isUp = true;
+		if (tblData.getSortColumn() == column) {
+			// flip sort direction
+			isUp = (tblData.getSortDirection() != SWT.UP);
+		}
+		tblData.setSortColumn(column);
+		tblData.setSortDirection(isUp ? SWT.UP : SWT.DOWN);
+		Field field = (Field)column.getData();
+		ordering = new Ordering(field, isUp);
 		showObjects();
 	}
 
