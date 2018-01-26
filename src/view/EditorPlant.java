@@ -34,7 +34,9 @@ public class EditorPlant extends AbstractEditor {
 	private EnumSelector<Family> selFamily;
 	private EnumSelector<PlantKind> selKind;
 	private SelectorWeekNumber selSowing;
+	private SelectorWeekNumber selPlanting;
 	private SelectorWeekNumber selHarvest;
+	private SelectorWeekNumber selHarvest2;
 	
 	private Plant theObject;
 
@@ -87,15 +89,25 @@ public class EditorPlant extends AbstractEditor {
 		widgetsFactory.createLabel(cMain, "Semis");
 		selSowing = new SelectorWeekNumber(cMain);
 		
-		widgetsFactory.createLabel(cMain, "Récolte");
+		widgetsFactory.createLabel(cMain, "Plantation");
+		selPlanting = new SelectorWeekNumber(cMain);
+		
+		widgetsFactory.createLabel(cMain, "Récolte 1");
 		selHarvest = new SelectorWeekNumber(cMain);
+		
+		widgetsFactory.createLabel(cMain, "Récolte 2");
+		selHarvest2 = new SelectorWeekNumber(cMain);
 		
 		widgetsFactory.createLink(cButtons, "<a>Wikipedia</a>", "Voir cette plante dans Wikipedia", new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if (theObject != null) {
-					String url = "http://fr.wikipedia.org/wiki/" + theObject.getNameLatin();
-					Program.launch(url);
+					if (txtLatin.getText().isEmpty()) {
+						MessageBox.error("Veuillez entrer le nom latin de la plante.");
+					} else {
+						String url = "http://fr.wikipedia.org/wiki/" + txtLatin.getText();
+						Program.launch(url);
+					}
 				}
 			}
 		});
@@ -120,7 +132,9 @@ public class EditorPlant extends AbstractEditor {
 			selFamily.setValue(object.getFamily());
 			selKind.setValue(object.getKind());
 			selSowing.setValue(object.getDateSowing());
+			selPlanting.setValue(object.getDatePlanting());
 			selHarvest.setValue(object.getDateHarvest1());
+			selHarvest2.setValue(object.getDateHarvest2());
 		} else {
 			txtName.setText("");
 			txtDesc.setText("");
@@ -155,7 +169,9 @@ public class EditorPlant extends AbstractEditor {
 			theObject.setFamily(selFamily.getValue());
 			theObject.setKind(selKind.getValue());
 			theObject.setDateSowing(selSowing.getValue());
+			theObject.setDatePlanting(selPlanting.getValue());
 			theObject.setDateHarvest1(selHarvest.getValue());
+			theObject.setDateHarvest2(selHarvest2.getValue());
 
 			try {
 				Controller.getInstance().savePlant(theObject);
@@ -177,8 +193,10 @@ public class EditorPlant extends AbstractEditor {
 		if (selSoil.getValue() != null && !selSoil.getValue().equals(theObject.getSoil())) return true;
 		if (selFamily.getValue() != null && !selFamily.getValue().equals(theObject.getFamily())) return true;
 		if (selKind.getValue() != null && !selKind.getValue().equals(theObject.getKind())) return true;
-		if (selSowing.getValue() != theObject.getDateSowing()) return true;
-		if (selHarvest.getValue() != theObject.getDateHarvest1()) return true;
+		if (selSowing.getValue()   != theObject.getDateSowing()) return true;
+		if (selPlanting.getValue() != theObject.getDatePlanting()) return true;
+		if (selHarvest.getValue()  != theObject.getDateHarvest1()) return true;
+		if (selHarvest2.getValue() != theObject.getDateHarvest2()) return true;
 		return false;
 	}
 
