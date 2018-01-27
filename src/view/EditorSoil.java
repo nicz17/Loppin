@@ -34,14 +34,14 @@ public class EditorSoil extends AbstractEditor {
 	public EditorSoil(Composite parent) {
 		super(parent);
 		
-		widgetsFactory.createLabel(cMain, Field.SOIL_NAME.getGuiName());
+		addLabel(Field.SOIL_NAME);
 		txtName = widgetsFactory.createText(cMain, Field.SOIL_NAME.getMax(), modifListener);
 
-		widgetsFactory.createLabel(cMain, "Description", true);
+		widgetsFactory.createLabel(cMain, Field.SOIL_DESC.getGuiName(), true);
 		txtDesc = widgetsFactory.createMultilineText(cMain, 
-				512, 125, modifListener);
+				Field.SOIL_DESC.getMax(), 125, modifListener);
 
-		widgetsFactory.createLabel(cMain, "Couleur");
+		addLabel(Field.SOIL_COLOR);
 		selColor = new SelectorColor(cMain, new RGB(128, 128, 128), "Choisir une couleur de sol", modifListener);
 
 		Controller.getInstance().addDataListener(this);

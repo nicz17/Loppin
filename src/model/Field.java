@@ -12,12 +12,16 @@ package model;
  */
 public enum Field {
 	
-	PLANT_NAME  ("plName", "Nom", 150, 64),
-	PLANT_LATIN ("plNameLatin", "Nom latin", 150, 64),
-	PLANT_DESC  ("plDescription", "Description", 250, 512),
-	PLANT_FAMILY("plFamily", "Famille", 120, 64),
-	PLANT_KIND  ("plKind", "Type", 120, 10),
-	PLANT_SOIL  ("plSoil", "Sol", 120, 64),
+	PLANT_NAME    ("plName", "Nom", 150, 64),
+	PLANT_LATIN   ("plNameLatin", "Nom latin", 150, 64),
+	PLANT_DESC    ("plDescription", "Description", 250, 512),
+	PLANT_FAMILY  ("plFamily", "Famille", 120, 64),
+	PLANT_KIND    ("plKind", "Type", 120, 10),
+	PLANT_SOIL    ("plSoil", "Sol", 120, -1),
+	PLANT_SOWING  ("plSowing", "Semis", 100, 52),
+	PLANT_PLANTING("plPlanting", "Plantation", 100, 52),
+	PLANT_HARVEST1("plHarvest1", "Récolte", 100, 52),
+	PLANT_HARVEST2("plHarvest2", "Récolte 2", 100, 52),
 	
 	SOIL_NAME ("soName", "Nom", 150, 64),
 	SOIL_DESC ("soDescription", "Description", 250, 512),
@@ -35,18 +39,37 @@ public enum Field {
 		this.max = max;
 	}
 
+	/**
+	 * Gets the database name of this field. For example 'plName'.
+	 * @return field database name
+	 */
 	public String getDbName() {
 		return dbName;
 	}
 
+	/**
+	 * Gets the user-interface label for this field.
+	 * For example 'Nom'.
+	 * @return user-interface name
+	 */
 	public String getGuiName() {
 		return guiName;
 	}
 
+	/**
+	 * Gets the preferred width, in pixels, for displaying
+	 * this field in a table column.
+	 * @return column width in pixels
+	 */
 	public int getWidth() {
 		return width;
 	}
 
+	/**
+	 * Gets the database maximum field size, if applicable.
+	 * For example, 64 chars for names.
+	 * @return  database max field size
+	 */
 	public int getMax() {
 		return max;
 	}

@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Vector;
 
 import model.Family;
+import model.Field;
 import model.Plant;
 import model.PlantKind;
 
@@ -47,17 +48,17 @@ public class EditorPlant extends AbstractEditor {
 	public EditorPlant(Composite parent) {
 		super(parent);
 		
-		widgetsFactory.createLabel(cMain, "Nom");
-		txtName = widgetsFactory.createText(cMain, 64, modifListener);
+		addLabel(Field.PLANT_NAME);
+		txtName = widgetsFactory.createText(cMain, Field.PLANT_NAME.getMax(), modifListener);
 		
-		widgetsFactory.createLabel(cMain, "Nom latin");
-		txtLatin = widgetsFactory.createText(cMain, 64, modifListener);
+		addLabel(Field.PLANT_LATIN);
+		txtLatin = widgetsFactory.createText(cMain, Field.PLANT_LATIN.getMax(), modifListener);
 
-		widgetsFactory.createLabel(cMain, "Description", true);
+		widgetsFactory.createLabel(cMain, Field.PLANT_DESC.getGuiName(), true);
 		txtDesc = widgetsFactory.createMultilineText(cMain, 
-				512, 125, modifListener);
+				Field.PLANT_DESC.getMax(), 125, modifListener);
 		
-		widgetsFactory.createLabel(cMain, "Famille");
+		addLabel(Field.PLANT_FAMILY);
 		selFamily = new EnumSelector<Family>("PlantFamilySelector", cMain, modifListener) {
 			@Override
 			public String getDisplayValue(Family family) {
@@ -70,7 +71,7 @@ public class EditorPlant extends AbstractEditor {
 			}
 		};
 		
-		widgetsFactory.createLabel(cMain, "Type");
+		addLabel(Field.PLANT_KIND);
 		selKind = new EnumSelector<PlantKind>("PlantKindSelector", cMain, modifListener) {
 			@Override
 			public String getDisplayValue(PlantKind kind) {
@@ -83,19 +84,19 @@ public class EditorPlant extends AbstractEditor {
 			}
 		};
 		
-		widgetsFactory.createLabel(cMain, "Sol");
+		addLabel(Field.PLANT_SOIL);
 		selSoil = new SelectorSoil("Plant soil selector", cMain, true, modifListener);
 		
-		widgetsFactory.createLabel(cMain, "Semis");
+		addLabel(Field.PLANT_SOWING);
 		selSowing = new SelectorWeekNumber(cMain);
 		
-		widgetsFactory.createLabel(cMain, "Plantation");
+		addLabel(Field.PLANT_PLANTING);
 		selPlanting = new SelectorWeekNumber(cMain);
 		
-		widgetsFactory.createLabel(cMain, "Récolte 1");
+		addLabel(Field.PLANT_HARVEST1);
 		selHarvest = new SelectorWeekNumber(cMain);
 		
-		widgetsFactory.createLabel(cMain, "Récolte 2");
+		addLabel(Field.PLANT_HARVEST2);
 		selHarvest2 = new SelectorWeekNumber(cMain);
 		
 		widgetsFactory.createLink(cButtons, "<a>Wikipedia</a>", "Voir cette plante dans Wikipedia", new SelectionAdapter() {

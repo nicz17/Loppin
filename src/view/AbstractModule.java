@@ -33,6 +33,7 @@ import common.view.SearchBox;
  * <ul>
  * <li>14.01.2018: nicz - Creation</li>
  * <li>24.01.2018: nicz - Configure table columns using Fields</li>
+ * <li>26.01.2018: nicz - Added sorting mechanism</li>
  * </ul>
  *
  * @param <T> the type of objects displayed in this module.
@@ -180,6 +181,10 @@ public abstract class AbstractModule<T extends DataObject> extends TabbedModule 
 		tblData.setSortDirection(SWT.UP);
 	}
 	
+	/**
+	 * Clears and reloads the table.
+	 * Tries to re-select the previously selected object.
+	 */
 	protected void reloadTable() {
 		tblData.removeAll();
 		for (T obj : vecObjects) {
@@ -187,7 +192,7 @@ public abstract class AbstractModule<T extends DataObject> extends TabbedModule 
 			for (int iCol = 0; iCol < vecColumns.size(); ++iCol) {
 				String value = obj.getValue(vecColumns.get(iCol));
 				if (value == null) {
-					value = "<Erreur!>";
+					value = "-";
 				}
 				item.setText(iCol, value);
 			}
@@ -195,6 +200,10 @@ public abstract class AbstractModule<T extends DataObject> extends TabbedModule 
 		reselectObject();
 	}
 	
+	/**
+	 * Called when a row is selected in table.
+	 * @param obj  the selected object
+	 */
 	protected abstract void onTableSelection(T obj);
 	
 	/**

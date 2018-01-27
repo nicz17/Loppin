@@ -1,5 +1,7 @@
 package view;
 
+import model.Field;
+
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -112,6 +114,10 @@ public abstract class AbstractEditor extends Composite implements DataListener {
 		btnCancel.setEnabled(hasUnsavedData);
 		btnDelete.setEnabled(enabled);
 		cMain.setEnabled(enabled);
+	}
+	
+	protected void addLabel(Field field) {
+		widgetsFactory.createLabel(cMain, field.getGuiName());
 	}
 	
 	/**
