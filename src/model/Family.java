@@ -47,7 +47,7 @@ public enum Family {
 	/**
 	 * Gets an enum value from the specified name.
 	 * Returns null if no such enum value.
-	 * @param sDbName a family bame as found in database
+	 * @param sDbName a family name as found in database
 	 * @return a family enum value, or null
 	 */
 	public static Family getFromDbName(String sDbName) {

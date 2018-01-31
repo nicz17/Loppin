@@ -25,7 +25,7 @@ public enum PlantKind {
 	}
 	
 	/**
-	 * Gets the translated family name for GUI display.
+	 * Gets the translated plant kind for GUI display.
 	 * @return a GUI translation
 	 */
 	public String getGuiName() {
@@ -43,17 +43,17 @@ public enum PlantKind {
 	/**
 	 * Gets an enum value from the specified name.
 	 * Returns null if no such enum value.
-	 * @param sDbName a family bame as found in database
-	 * @return a family enum value, or null
+	 * @param sDbName a plant kind as found in database
+	 * @return an enum value, or null
 	 */
 	public static PlantKind getFromDbName(String sDbName) {
-		PlantKind family = null;
-		for (PlantKind aFamily : PlantKind.values()) {
-			if (aFamily.name().equals(sDbName)) {
-				family = aFamily;
+		PlantKind value = null;
+		for (PlantKind aValue : PlantKind.values()) {
+			if (aValue.name().equals(sDbName)) {
+				value = aValue;
 				break;
 			}
 		}
-		return family;
+		return value;
 	}
 }
