@@ -79,7 +79,24 @@ public class Association extends DataObject {
 
 	@Override
 	public String getValue(Field field) {
-		return null;
+		String value = null;
+		switch (field) {
+		case ASSOC_DESC:
+			value = (getDescription() == null ? "" : getDescription());
+			break;
+		case ASSOC_KIND:
+			value = getKind().getGuiName();
+			break;
+		case ASSOC_PLANT1:
+			value = getPlant1().getName();
+			break;
+		case ASSOC_PLANT2:
+			value = getPlant2().getName();
+			break;
+		default:
+			break;
+		}
+		return value;
 	}
 	
 	@Override

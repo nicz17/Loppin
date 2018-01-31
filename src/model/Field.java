@@ -12,6 +12,11 @@ package model;
  */
 public enum Field {
 	
+	ASSOC_DESC    ("asDescription", "Description", 250, 512),
+	ASSOC_KIND    ("asKind", "Type", 50, 10),
+	ASSOC_PLANT1  ("asPlant1", "Plante 1", 150, 64),
+	ASSOC_PLANT2  ("asPlant2", "Plante 2", 150, 64),
+	
 	PLANT_NAME    ("plName", "Nom", 150, 64),
 	PLANT_LATIN   ("plNameLatin", "Nom latin", 150, 64),
 	PLANT_DESC    ("plDescription", "Description", 250, 512),
