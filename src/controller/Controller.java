@@ -23,6 +23,7 @@ import controller.validation.ValidatorSoil;
  * <p><b>Modifications:</b>
  * <ul>
  * <li>14.01.2018: nicz - Creation</li>
+ * <li>01.02.2018: nicz - Handle Plant cache</li>
  * </ul>
  */
 public class Controller {
@@ -86,6 +87,7 @@ public class Controller {
 		log.info("Saving " + plant);
 		validatorPlant.validateSave(plant);
 		int idx = DataAccess.getInstance().savePlant(plant);
+		CachePlant.getInstance().refresh(idx);
 		notifyDataListeners(UpdateType.PLANT, idx);
 		return idx;
 	}
@@ -101,6 +103,7 @@ public class Controller {
 		log.info("Saving " + soil);
 		validatorSoil.validateSave(soil);
 		int idx = DataAccess.getInstance().saveSoil(soil);
+		CacheSoil.getInstance().refresh(idx);
 		notifyDataListeners(UpdateType.SOIL, idx);
 		return idx;
 	}
@@ -114,6 +117,7 @@ public class Controller {
 		log.info("Request to delete " + plant);
 		validatorPlant.validateDelete(plant);
 		DataAccess.getInstance().deletePlant(plant);
+		CachePlant.getInstance().loadAll();
 		notifyDataListeners(UpdateType.PLANT, -1);
 	}
 	
@@ -126,6 +130,7 @@ public class Controller {
 		log.info("Request to delete " + soil);
 		validatorSoil.validateDelete(soil);
 		DataAccess.getInstance().deleteSoil(soil);
+		CacheSoil.getInstance().loadAll();
 		notifyDataListeners(UpdateType.SOIL, -1);
 	}
 	
@@ -195,7 +200,9 @@ public class Controller {
 	 * Reloads all caches.
 	 */
 	public void reloadCaches() {
+		// NB: cache reloading order is important !
 		CacheSoil.getInstance().loadAll();
+		CachePlant.getInstance().loadAll();
 	}
 	
 	/**
