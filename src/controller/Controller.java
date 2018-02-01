@@ -4,6 +4,7 @@ import java.util.Vector;
 
 import view.Loppin;
 
+import model.Association;
 import model.DataObject;
 import model.Field;
 import model.Ordering;
@@ -162,6 +163,8 @@ public class Controller {
 			// Add dependencies to Plant
 			String where = "plSoil = " + obj.getIdx();
 			vecDeps.addAll(DataAccess.getInstance().fetchPlants(where, null));
+		} else if (obj instanceof Association) {
+			// No dependencies for Association, since they can always be deleted.
 		} else {
 			log.error("Unhandled DataObject " + obj);
 		}
