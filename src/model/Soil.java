@@ -82,7 +82,7 @@ public class Soil extends DataObject implements Comparable<Soil> {
 	
 	@Override
 	public String toString() {
-		return "Soil " + getName();
+		return "Sol " + getName();
 	}
 
 	/**

@@ -15,6 +15,7 @@ import org.eclipse.swt.widgets.Listener;
 import common.base.Logger;
 import common.exceptions.AppException;
 import common.view.AbstractMain;
+import common.view.BaseModule;
 import common.view.IconManager;
 import common.view.MessageBox;
 import common.view.ModuleFactory;
@@ -72,6 +73,35 @@ public class Loppin extends AbstractMain {
 	public CTabFolder getFolder() {
 		return folder;
 	}
+	
+	/**
+	 * Navigates to the specified module and tries to select the specified object.
+	 * @param module     the module to navigate to
+	 * @param idxObject  the database index of the object to select
+	 */
+	public void navigate(Module module, int idxObject) {
+		if (module == null) {
+			log.warn("Skipping navigation to null module");
+			return;
+		}
+		
+		int idxModule = module.ordinal();
+		folder.setSelection(idxModule);
+		
+		CTabItem tabItem = folder.getItem(idxModule);
+		BaseModule bm = null;
+		
+		if (tabItem != null) {
+			buildModule(tabItem);
+			bm = (BaseModule) tabItem.getControl();
+		}
+		
+		if (bm != null) {
+			bm.selectObject(idxObject);
+		} else {
+			log.error("Failed to navigate to " + module.getTitle() + " with selection " + idxObject);
+		}
+	}
 
 
 	/**
@@ -90,8 +120,6 @@ public class Loppin extends AbstractMain {
 	protected void onInit() {
 		controller = Controller.getInstance();
 		moduleFactory = ModuleFactory.getInstance();
-		//ViewTools.init(display);
-
 	}
 
 	@Override

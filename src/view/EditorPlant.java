@@ -7,6 +7,7 @@ import model.Family;
 import model.Field;
 import model.Plant;
 import model.PlantKind;
+import model.Soil;
 
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -84,7 +85,17 @@ public class EditorPlant extends AbstractEditor {
 			}
 		};
 		
-		addLabel(Field.PLANT_SOIL);
+		widgetsFactory.createLink(cMain, "<a>" + Field.PLANT_SOIL.getGuiName() + "</a>", 
+				"Modifier ce sol", new SelectionAdapter() {
+					public void widgetSelected(SelectionEvent e) {
+						if (theObject != null) {
+							Soil soil = theObject.getSoil();
+							if (soil != null) {
+								Loppin.getInstance().navigate(Module.SOILS, soil.getIdx());
+							}
+						}
+					}
+				});
 		selSoil = new SelectorSoil("Plant soil selector", cMain, true, modifListener);
 		
 		addLabel(Field.PLANT_SOWING);
