@@ -20,15 +20,8 @@ public class ValidatorPlant extends Validator<Plant> {
 			onError("Impossible d'enregistrer une plante indéfinie !");
 		}
 		
-		String name = obj.getName();
-		if (name == null || name.isEmpty()) {
-			onError("Nom de plante invalide : " + obj);
-		}
-		
-		name = obj.getNameLatin();
-		if (name == null || name.isEmpty()) {
-			onError("Nom latin invalide pour " + obj);
-		}
+		validateName(obj.getName(), obj);
+		validateName(obj.getNameLatin(), obj);
 		
 		if (obj.getFamily() == null) {
 			onError("Veuillez choisir une famille !");

@@ -20,10 +20,7 @@ public class ValidatorSoil extends Validator<Soil> {
 			onError("Impossible d'enregistrer un sol indéfini !");
 		}
 		
-		String name = obj.getName();
-		if (name == null || name.isEmpty()) {
-			onError("Nom de sol invalide : " + obj);
-		}
+		validateName(obj.getName(), obj);
 	}
 
 	@Override

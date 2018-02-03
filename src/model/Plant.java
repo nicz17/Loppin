@@ -175,7 +175,7 @@ public class Plant extends DataObject implements Comparable<Plant> {
 	
 	@Override
 	public String toString() {
-		return "Plant " + getName() + " (" + getFamily().getGuiName() + ")";
+		return "Plante " + getName() + " (" + getFamily().getGuiName() + ")";
 	}
 
 	/**

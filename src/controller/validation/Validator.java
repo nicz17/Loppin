@@ -42,6 +42,23 @@ public abstract class Validator<T extends DataObject> {
 	public abstract void validateDelete(T obj) throws ValidationException;
 	
 	/**
+	 * Checks that the specified name follows some rules.
+	 * Names shouldn't be empty, start or end with spaces, etc.
+	 * @param name  the name to validate
+	 * @param obj   the object the name belongs to
+	 * @throws ValidationException  if name is invalid
+	 */
+	protected void validateName(String name, T obj) throws ValidationException {
+		if (name == null || name.isEmpty()) {
+			onError(obj.toString() + " :\nLe nom ne doit pas être vide.");
+		}
+		
+		if (name.startsWith(" ") || name.endsWith(" ")) {
+			onError(obj.toString() + " :\nLe nom ne doit pas commencer ou finir par des espaces.");
+		}
+	}
+	
+	/**
 	 * Checks if the specified object has dependencies in database.
 	 * If there are dependencies, throws a validation exception with 
 	 * the names of these dependencies.
