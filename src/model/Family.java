@@ -11,14 +11,17 @@ package model;
  */
 public enum Family {
 	
+	AMARANTHACEAE,
 	AMARYLLIDACEAE,
 	APIACEAE,
 	ASTERACEAE,
 	BORAGINACEAE,
 	BRASSICACEAE,
+	CAPRIFOLIACEAE,
 	CUCURBITACEAE,
 	FABACEAE,
 	LAMIACEAE,
+	PLANTAGINACEAE,
 	POACEAE,
 	ROSACEAE,
 	SOLANACEAE,
@@ -30,6 +33,7 @@ public enum Family {
 	 */
 	public String getGuiName() {
 		String sGuiName = name().substring(0, 1) + name().substring(1).toLowerCase();
+		sGuiName = sGuiName.replace("eae", "ées");
 		if (OTHER.equals(this)) {
 			sGuiName = "Autres";
 		}
