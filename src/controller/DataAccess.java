@@ -22,6 +22,7 @@ import common.exceptions.AppException;
  * <ul>
  * <li>14.01.2018: nicz - Creation</li>
  * <li>20.01.2018: nicz - Added plant methods</li>
+ * <li>05.02.2018: nicz - Added association methods</li>
  * </ul>
  */
 public class DataAccess {

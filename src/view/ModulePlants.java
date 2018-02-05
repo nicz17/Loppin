@@ -23,9 +23,10 @@ public class ModulePlants extends AbstractModule<Plant> {
 	private static final Logger log = new Logger("ModulePlants", true);
 	
 	private EditorPlant editor;
+	private ListAssociations lstAssoc;
 
 	public ModulePlants() {
-		super(2);
+		super(3);
 		
 		loadWidgets();
 		loadData();
@@ -44,9 +45,6 @@ public class ModulePlants extends AbstractModule<Plant> {
 		vecObjects.add(newObj);
 		
 		// show object in table
-//		TableItem item = new TableItem(tblData, SWT.NONE);
-//		item.setText(newObj.getDataRow());
-//		tblData.setSelection(item);
 		setSelectedObject(0);
 		reloadTable();
 		
@@ -72,16 +70,17 @@ public class ModulePlants extends AbstractModule<Plant> {
 		
 	    editor = new EditorPlant(cRight);
 	    
+	    lstAssoc = new ListAssociations(cThird);
+	    
 	    searchBox = new IncrementalSearchBox(cButtons) {
 	    	public void onSearch() {
 	    		showObjects();
 	    	}
 	    };
+	    
+	    btnNew.setToolTipText("Ajouter une plante");
 		
 		Controller.getInstance().addDataListener(this);
-
-		//orderByColumn(0);
-		log.info("Done loadWidgets");
 	}
 
 	@Override
@@ -91,11 +90,11 @@ public class ModulePlants extends AbstractModule<Plant> {
 			tblData.select(0);
 			showObject(vecObjects.firstElement());
 		}
-		log.info("Done loadData");
 	}
 	
 	private void showObject(Plant obj) {
 		editor.showObject(obj);
+		lstAssoc.showObject(obj);
 	}
 
 }
