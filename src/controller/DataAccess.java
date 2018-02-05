@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
+import model.Association;
 import model.Field;
 import model.Ordering;
 import model.Plant;
@@ -117,6 +118,37 @@ public class DataAccess {
 
 		return vecResult;
 	}
+	
+	/**
+	 * Fetches Association objects from database.
+	 * @param where  optional SQL where clause (without where keyword). May be null.
+	 * @return  the fetched Association objects.
+	 */
+	protected Vector<Association> fetchAssociations(String where) {
+		Vector<Association> vecResult = new Vector<>();
+		
+		String query = "SELECT * FROM Association";
+		if (where != null && !where.isEmpty()) {
+			query += " WHERE " + where;
+		}
+
+		try {
+			Connection conn = dbTools.getConnection();
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			rs.beforeFirst();
+			while (rs.next()) {
+				Association obj = objectFactory.createAssociation(rs);
+				vecResult.add(obj);
+			}
+			log.debug("Returning " + vecResult.size() + " associations");
+			stmt.close();
+		} catch (SQLException e) {
+			log.error("Fetching associations failed: " + e.getMessage());
+		}
+
+		return vecResult;
+	}
 
 	/**
 	 * Saves the specified {@link Plant} to database.
@@ -183,7 +215,7 @@ public class DataAccess {
 			stmt.close();
 		} catch (SQLException e) {
 			log.error("Saving Plant failed: " + e.getMessage());
-			throw new AppException("Echec de sauvegarde de la plante " + obj + "\n" + e.getMessage());
+			throw new AppException("Echec de sauvegarde de " + obj + "\n" + e.getMessage());
 		}
 		return idx;
 	}
@@ -236,7 +268,60 @@ public class DataAccess {
 			stmt.close();
 		} catch (SQLException e) {
 			log.error("Saving Soil failed: " + e.getMessage());
-			throw new AppException("Echec de sauvegarde du sol " + obj + "\n" + e.getMessage());
+			throw new AppException("Echec de sauvegarde de " + obj + "\n" + e.getMessage());
+		}
+		return idx;
+	}
+
+	/**
+	 * Saves the specified {@link Association} to database.
+	 * 
+	 * @param obj  the association to save
+	 * @return the database index of saved object
+	 * @throws AppException if saving failed
+	 */
+	protected int saveAssociation(Association obj) throws AppException {
+		Connection conn = dbTools.getConnection();
+		log.info("Saving " + obj);
+		int idx = -1;
+		
+		try {
+			Statement stmt = conn.createStatement();
+			
+			if (obj.getIdx() > 0) {
+				// update existing
+				String query = String.format("UPDATE Association SET " +
+						"asDescription = %s, asKind = %s " +
+						"asPlant1 = %d, asPlant2 = %d " +
+						"WHERE idxAssociation = %d", 
+						DatabaseTools.toSQLstring(obj.getDescription()),
+						DatabaseTools.toSQLstring(obj.getKind().name()),
+						obj.getPlant1().getIdx(), obj.getPlant2().getIdx(), 
+						obj.getIdx() );
+				log.debug("SQL: " + query);
+				stmt.execute(query);
+				idx = obj.getIdx();
+			} else {
+				// create new
+				String query = String.format("INSERT INTO Association " +
+						"(idxAssociation, asDescription, asKind, asPlant1, asPlant2) " +
+						"VALUES (null, %s, %s, %d, %d)", 
+						DatabaseTools.toSQLstring(obj.getDescription()),
+						DatabaseTools.toSQLstring(obj.getKind().name()),
+						obj.getPlant1().getIdx(), obj.getPlant2().getIdx());
+				log.debug("SQL: " + query);
+				stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
+				
+				// Get inserted index
+				ResultSet rs = stmt.getGeneratedKeys();
+				if (rs.next())
+					idx = rs.getInt(1);
+				rs.close();
+			}
+			stmt.close();
+		} catch (SQLException e) {
+			log.error("Saving Association failed: " + e.getMessage());
+			throw new AppException("Echec de sauvegarde de " + obj + "\n" + e.getMessage());
 		}
 		return idx;
 	}
@@ -288,6 +373,33 @@ public class DataAccess {
 		} catch (SQLException e) {
 			log.error("Deleting Soil failed: " + e.getMessage());
 			throw new AppException("Echec de suppression du sol " + obj + "\n" + e.getMessage());
+		}
+	}
+	
+	/**
+	 * Deletes Associations from database.
+	 * 
+	 * @param where  the SQL where-clause (without where keyword)
+	 * @throws AppException if failed to delete object
+	 */
+	protected void deleteAssociations(String where) throws AppException {
+		Connection conn = dbTools.getConnection();
+		log.info("Deleting associations");
+		
+		if (where == null || where.isEmpty()) {
+			log.error("Invalid where-clause to delete associations, skipping");
+			return;
+		}
+		String query = "DELETE FROM Association WHERE " + where;
+		
+		try {
+			Statement stmt = conn.createStatement();
+			log.debug("SQL: " + query);
+			stmt.execute(query);
+			stmt.close();
+		} catch (SQLException e) {
+			log.error("Deleting Associations failed: " + e.getMessage());
+			throw new AppException("Echec de suppression d'associations\n" + e.getMessage());
 		}
 	}
 	
