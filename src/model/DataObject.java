@@ -31,4 +31,13 @@ public abstract class DataObject {
 	 */
 	public abstract String getValue(Field field);
 	
+	/**
+	 * Checks if the object is saved in database or not.
+	 * New objects have index <= 0.
+	 * @return true if object has not been saved yet.
+	 */
+	public boolean isUnsaved() {
+		return getIdx() < 1;
+	}
+	
 }

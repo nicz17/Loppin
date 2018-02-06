@@ -63,6 +63,19 @@ public class Controller {
 	}
 	
 	/**
+	 * Gets the list of associations defined for the specified plant
+	 * @param plant  the plant for which to get associations
+	 * @return a (possibly empty) list of associations
+	 */
+	public Vector<Association> getAssociations(Plant plant) {
+		if (plant != null && !plant.isUnsaved()) {
+			String where = "asPlant1 = " + plant.getIdx() + " OR asPlant2 = " + plant.getIdx();
+			return DataAccess.getInstance().fetchAssociations(where);
+		}
+		return new Vector<>();
+	}
+	
+	/**
 	 * Gets the list of Soil objects saved in database.
 	 * @param filter  a text filter (may be null)
 	 * @param ordering  optional sorting object. May be null.
