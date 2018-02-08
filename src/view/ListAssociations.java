@@ -11,7 +11,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.List;
 
-import common.view.MessageBox;
 import common.view.WidgetsFactory;
 
 /**
@@ -49,7 +48,8 @@ public class ListAssociations extends Composite {
 		
 		btnEdit = WidgetsFactory.getInstance().createPushButton(grpAssoc, "Editer", "edit", "Editer", true, new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				MessageBox.info("Pas encore implémenté !");
+				DialogAssociationEdition dlgEdit = new DialogAssociationEdition(getShell(), plant);
+				dlgEdit.open();
 			}
 		});
 		
@@ -62,11 +62,11 @@ public class ListAssociations extends Composite {
 		lstAssoc.removeAll();
 		
 		if (plant == null) {
-			lstAssoc.add("Veuillez choisir une plante");
+			lstAssoc.add("Veuillez choisir\nune plante");
 		} else if (plant.getIdx() < 1) {
-			lstAssoc.add("Veuillez d'abord enregistrer la plante");
+			lstAssoc.add("Veuillez d'abord\nenregistrer la plante");
 		} else {
-			lstAssoc.add("Associations pour " + plant.getName());
+			lstAssoc.add("Associations pour\n" + plant.getName());
 		}
 		
 		enableWidgets();
