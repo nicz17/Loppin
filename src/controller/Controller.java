@@ -14,6 +14,7 @@ import model.Soil;
 import common.base.Logger;
 import common.exceptions.ValidationException;
 import controller.DatabaseTools.UpdateType;
+import controller.validation.ValidatorAssociation;
 import controller.validation.ValidatorPlant;
 import controller.validation.ValidatorSoil;
 
@@ -33,8 +34,9 @@ public class Controller {
 	private static Controller singleton;
 	
 	private final Vector<DataListener> vecDataListeners;
-	private final ValidatorPlant validatorPlant;
-	private final ValidatorSoil  validatorSoil;
+	private final ValidatorPlant       validatorPlant;
+	private final ValidatorAssociation validatorAssociation;
+	private final ValidatorSoil        validatorSoil;
 
 	/**
 	 * Gets the singleton instance.
@@ -105,6 +107,30 @@ public class Controller {
 		notifyDataListeners(UpdateType.PLANT, idx);
 		return idx;
 	}
+	
+	/**
+	 * Saves the specified list of plant associations to database.
+	 * @param vecAssociations the associations to save
+	 * @throws Exception  if saving any of the associations is invalid
+	 */
+	public void saveAssociations(Vector<Association> vecAssociations) throws Exception {
+		if (vecAssociations == null || vecAssociations.isEmpty()) {
+			// nothing to do
+			return;
+		}
+		
+		log.info("Saving " + vecAssociations.size() + " associations");
+		
+		// First validate all, before saving any
+		for (Association asso : vecAssociations) {
+			validatorAssociation.validateSave(asso);
+		}
+		
+		// All are valid: save
+		for (Association asso : vecAssociations) {
+			DataAccess.getInstance().saveAssociation(asso);
+		}
+	}
 
 	/**
 	 * Saves the specified soil to database.
@@ -130,6 +156,12 @@ public class Controller {
 	public void deletePlant(Plant plant) throws Exception {
 		log.info("Request to delete " + plant);
 		validatorPlant.validateDelete(plant);
+		
+		// Delete all related associations
+		String where = "asPlant1 = " + plant.getIdx() + " OR asPlant2 = " + plant.getIdx();
+		DataAccess.getInstance().deleteAssociations(where);
+		
+		// Delete the plant, reload cache, notify listeners
 		DataAccess.getInstance().deletePlant(plant);
 		CachePlant.getInstance().loadAll();
 		notifyDataListeners(UpdateType.PLANT, -1);
@@ -249,9 +281,10 @@ public class Controller {
 	 */
 	private Controller() {
 		Logger.setGlobalDebug(true);
-		vecDataListeners = new Vector<DataListener>();
-		validatorSoil = new ValidatorSoil();
-		validatorPlant = new ValidatorPlant();
+		vecDataListeners     = new Vector<DataListener>();
+		validatorSoil        = new ValidatorSoil();
+		validatorPlant       = new ValidatorPlant();
+		validatorAssociation = new ValidatorAssociation();
 		
 		reloadCaches();
 	}
