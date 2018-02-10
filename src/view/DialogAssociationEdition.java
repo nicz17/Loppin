@@ -3,6 +3,7 @@ package view;
 import java.util.Iterator;
 import java.util.Vector;
 
+import model.Association;
 import model.Field;
 import model.Plant;
 
@@ -70,14 +71,15 @@ public class DialogAssociationEdition {
 			
 			@Override
 			public void onSelection(Plant obj) {
-				
+				showObject(obj);
 			}
 		};
 		tblPlants.initTable(new Field[] {Field.PLANT_NAME, Field.PLANT_FAMILY});
 		
-		editor = new EditorAssociation(shell);
+		Composite cRight = widgetsFactory.createCompositeTop(shell, true);
+		editor = new EditorAssociation(cRight);
 				
-		Composite cButtons = widgetsFactory.createComposite(shell, 2, true, 12);
+		Composite cButtons = widgetsFactory.createComposite(cRight, 2, true, 12);
 		
 		btnSave = widgetsFactory.createOkButton(cButtons, new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -115,6 +117,11 @@ public class DialogAssociationEdition {
 		}
 		
 		tblPlants.showObjects(vecPlants);
+	}
+	
+	private void showObject(Plant other) {
+		Association assoc = Association.create(plant, other);
+		editor.showObject(assoc);
 	}
 	
 	private void save() {

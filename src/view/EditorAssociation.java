@@ -8,6 +8,7 @@ import model.AssociationKind;
 import model.Field;
 
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import common.view.MessageBox;
@@ -24,6 +25,7 @@ import controller.Controller;
  */
 public class EditorAssociation extends AbstractEditor {
 	
+	private Label lblPlants;
 	private Text txtDesc;
 	private EnumSelector<AssociationKind> selKind;
 	
@@ -35,10 +37,9 @@ public class EditorAssociation extends AbstractEditor {
 	 */
 	public EditorAssociation(Composite parent) {
 		super(parent);
-		
-		widgetsFactory.createLabel(cMain, Field.ASSOC_DESC.getGuiName(), true);
-		txtDesc = widgetsFactory.createMultilineText(cMain, 
-				Field.ASSOC_DESC.getMax(), 125, modifListener);
+
+		addLabel(Field.ASSOC_NAME);
+		lblPlants = widgetsFactory.createLabel(cMain);
 
 		addLabel(Field.ASSOC_KIND);
 		selKind = new EnumSelector<AssociationKind>("SelectorAssocKind", cMain, modifListener) {
@@ -52,6 +53,10 @@ public class EditorAssociation extends AbstractEditor {
 				return new Vector<AssociationKind>(Arrays.asList(AssociationKind.values()));
 			}
 		};
+		
+		widgetsFactory.createLabel(cMain, Field.ASSOC_DESC.getGuiName(), true);
+		txtDesc = widgetsFactory.createMultilineText(cMain, 
+				Field.ASSOC_DESC.getMax(), 125, modifListener);
 
 		Controller.getInstance().addDataListener(this);
 	}
@@ -65,9 +70,11 @@ public class EditorAssociation extends AbstractEditor {
 		theObject = object;
 		
 		if (object != null) {
-			txtDesc.setText(object.getDescription() == null ? "" : object.getDescription());
+			lblPlants.setText(object.getValue(Field.ASSOC_NAME));
+			txtDesc.setText(object.getValue(Field.ASSOC_DESC));
 			selKind.setValue(object.getKind());
 		} else {
+			lblPlants.setText("Veuillez choisir une plante");
 			txtDesc.setText("");
 			selKind.setValue(null);
 		}

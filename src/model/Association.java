@@ -16,6 +16,22 @@ public class Association extends DataObject {
 	private AssociationKind kind;
 	private String description;
 	
+	/**
+	 * Creates a new neutral association between the two specified plants.
+	 * @param plant1  the first plant
+	 * @param plant2  the second plant
+	 * @return  the created association
+	 */
+	public static Association create(Plant plant1, Plant plant2) {
+		Plant p1 = plant1;
+		Plant p2 = plant2;
+		if (plant2.getIdx() < plant1.getIdx()) {
+			p1 = plant2;
+			p2 = plant1;
+		}
+		Association result = new Association(0, p1, p2, AssociationKind.NEUTRAL, null);
+		return result;
+	}
 	
 	/**
 	 * Constructor.
@@ -42,7 +58,7 @@ public class Association extends DataObject {
 
 	@Override
 	public String getName() {
-		return plant1.getName() + "-" + plant2.getName() + " : " + kind.getGuiName();
+		return plant1.getName() + " - " + plant2.getName();
 	}
 
 	public Plant getPlant1() {
@@ -81,6 +97,9 @@ public class Association extends DataObject {
 	public String getValue(Field field) {
 		String value = null;
 		switch (field) {
+		case ASSOC_NAME:
+			value = getName();
+			break;
 		case ASSOC_DESC:
 			value = (getDescription() == null ? "" : getDescription());
 			break;
