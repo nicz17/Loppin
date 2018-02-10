@@ -1,5 +1,9 @@
 package view;
 
+import java.util.Iterator;
+import java.util.Vector;
+
+import model.Field;
 import model.Plant;
 
 import org.eclipse.swt.SWT;
@@ -11,10 +15,10 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Table;
 
 import common.view.MessageBox;
 import common.view.WidgetsFactory;
+import controller.Controller;
 
 /**
  * A dialog window used to define the association of a selected plant with other plants.
@@ -32,8 +36,9 @@ public class DialogAssociationEdition {
 
 	private final Plant plant;
 	
-	private Shell  parent;
-	private Table  tblPlants;
+	private Shell parent;
+	private DataTable<Plant> tblPlants;
+	private EditorAssociation editor;
 	private Button btnSave;
 	
 	/**
@@ -53,19 +58,24 @@ public class DialogAssociationEdition {
 		shell.setText("Définir les associations de " + plant.getName());
 		shell.setLayout(new GridLayout(2, false));
 		
-		GridData data;
-
-		tblPlants = new Table(shell, SWT.SINGLE | SWT.BORDER | SWT.FULL_SELECTION);
-		tblPlants.setLinesVisible(true);
-		tblPlants.setHeaderVisible(true);
-		data = new GridData(SWT.FILL, SWT.FILL, true, true);
-		data.widthHint = 400;
+		GridData data = new GridData();
 		data.heightHint = 600;
-		data.verticalIndent = 10;
-		//data.horizontalIndent = 8;
-		tblPlants.setLayoutData(data);
+		shell.setLayoutData(data);
 		
-		widgetsFactory.createLabel(shell, "Pas encore implémenté");
+		tblPlants = new DataTable<Plant>(shell, 400) {
+			@Override
+			public void onSorting() {
+				loadData();
+			}
+			
+			@Override
+			public void onSelection(Plant obj) {
+				
+			}
+		};
+		tblPlants.initTable(new Field[] {Field.PLANT_NAME, Field.PLANT_FAMILY});
+		
+		editor = new EditorAssociation(shell);
 				
 		Composite cButtons = widgetsFactory.createComposite(shell, 2, true, 12);
 		
@@ -76,7 +86,7 @@ public class DialogAssociationEdition {
 			}
 		});
 		
-		widgetsFactory.createCancelButton(cButtons, new SelectionAdapter() {
+		widgetsFactory.createCloseButton(cButtons, new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				shell.dispose();
 			}
@@ -84,11 +94,27 @@ public class DialogAssociationEdition {
 
 		enableButtons();
 		
-		shell.pack();
+		//shell.pack();
 		shell.open();
+		loadData();
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch()) display.sleep();
 		}
+	}
+	
+	private void loadData() {
+		Vector<Plant> vecPlants = Controller.getInstance().getPlants(null, tblPlants.getOrdering());
+		
+		// remove our plant
+		Iterator<Plant> it = vecPlants.iterator();
+		while (it.hasNext()) {
+			if (it.next().getIdx() == plant.getIdx()) {
+				it.remove();
+				break;
+			}
+		}
+		
+		tblPlants.showObjects(vecPlants);
 	}
 	
 	private void save() {
