@@ -292,7 +292,7 @@ public class DataAccess {
 			if (obj.getIdx() > 0) {
 				// update existing
 				String query = String.format("UPDATE Association SET " +
-						"asDescription = %s, asKind = %s " +
+						"asDescription = %s, asKind = %s, " +
 						"asPlant1 = %d, asPlant2 = %d " +
 						"WHERE idxAssociation = %d", 
 						DatabaseTools.toSQLstring(obj.getDescription()),
