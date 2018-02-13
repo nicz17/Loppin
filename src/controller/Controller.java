@@ -133,6 +133,21 @@ public class Controller {
 	}
 
 	/**
+	 * Saves the specified association to database.
+	 * 
+	 * @param association  the association to save
+	 * @return  the database index
+	 * @throws ValidationException  if saving is invalid
+	 */
+	public int saveAssociation(Association association) throws Exception {
+		log.info("Saving " + association);
+		validatorAssociation.validateSave(association);
+		int idx = DataAccess.getInstance().saveAssociation(association);
+		notifyDataListeners(UpdateType.ASSOCIATION, idx);
+		return idx;
+	}
+
+	/**
 	 * Saves the specified soil to database.
 	 * 
 	 * @param soil  the soil to save
@@ -238,6 +253,9 @@ public class Controller {
 				break;
 			case SOIL:
 				li.soilUpdated(idx);
+				break;
+			case ASSOCIATION:
+				li.associationUpdated(idx);
 				break;
 			default:
 			}

@@ -8,6 +8,7 @@ import model.Soil;
  * <p><b>Modifications:</b>
  * <ul>
  * <li>14.01.2018: nicz - Creation</li>
+ * <li>13.02.2018: nicz - Added Association update</li>
  * </ul>
  */
 public interface DataListener {
@@ -29,4 +30,10 @@ public interface DataListener {
 	 * @param idx  the garden database index
 	 */
 	public void gardenUpdated(int idx);
+	
+	/**
+	 * An Association was updated.
+	 * @param idx  the association database index
+	 */
+	public void associationUpdated(int idx);
 }

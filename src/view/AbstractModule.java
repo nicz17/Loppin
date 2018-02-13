@@ -153,6 +153,18 @@ public abstract class AbstractModule<T extends DataObject> extends TabbedModule 
 		reselectObject();
 	}
 	
+	public T getSelectedObject() {
+		if (selIdx == null) {
+			return null;
+		}
+		for (T obj : vecObjects) {
+			if (obj.getIdx() == selIdx.intValue()) {
+				return obj;
+			}
+		}
+		return null;
+	}
+	
 	/**
 	 * Initializes the table with one column for each specified field.
 	 * @param fields  the database fields to display as table columns

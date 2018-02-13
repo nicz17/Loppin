@@ -100,9 +100,10 @@ public class DatabaseTools {
 	 *
 	 */
 	public enum UpdateType {
-		SOIL,
+		ASSOCIATION,
+		GARDEN,
 		PLANT, 
-		GARDEN
+		SOIL
 	}
 
 	/**
