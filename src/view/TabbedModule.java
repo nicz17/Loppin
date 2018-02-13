@@ -31,4 +31,7 @@ public abstract class TabbedModule extends BaseModule implements DataListener {
 	@Override
 	public void gardenUpdated(int idx) {};
 
+	@Override
+	public void associationUpdated(int idx) {};
+
 }

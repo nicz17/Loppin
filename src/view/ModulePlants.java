@@ -40,6 +40,11 @@ public class ModulePlants extends AbstractModule<Plant> {
 	}
 	
 	@Override
+	public void associationUpdated(int idx) {
+		showObject(getSelectedObject());
+	}
+	
+	@Override
 	protected void createObject() {
 		Plant newObj = new Plant(0, "", "", PlantKind.getDefault(), Family.getDefault(), null);
 		vecObjects.add(newObj);

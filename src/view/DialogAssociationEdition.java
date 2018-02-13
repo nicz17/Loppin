@@ -36,6 +36,7 @@ public class DialogAssociationEdition {
 			WidgetsFactory.getInstance();
 
 	private final Plant plant;
+	private Vector<Association> vecAssoc;
 	
 	private Shell parent;
 	private DataTable<Plant> tblPlants;
@@ -50,6 +51,7 @@ public class DialogAssociationEdition {
 	public DialogAssociationEdition(Shell parent, Plant plant) {
 		this.parent = parent;
 		this.plant = plant;
+		this.vecAssoc = new Vector<>();
 	}
 	
 	public void open() {
@@ -105,6 +107,7 @@ public class DialogAssociationEdition {
 	}
 	
 	private void loadData() {
+		// load other plants
 		Vector<Plant> vecPlants = Controller.getInstance().getPlants(null, tblPlants.getOrdering());
 		
 		// remove our plant
@@ -116,12 +119,26 @@ public class DialogAssociationEdition {
 			}
 		}
 		
+		// load associations with our plant
+		vecAssoc = Controller.getInstance().getAssociations(plant);
+		
 		tblPlants.showObjects(vecPlants);
 	}
 	
 	private void showObject(Plant other) {
-		Association assoc = Association.create(plant, other);
+		Association assoc = getAssociation(other);
 		editor.showObject(assoc);
+	}
+	
+	private Association getAssociation(Plant other) {
+		for (Association assoc : vecAssoc) {
+			if (assoc.getPlant1().getIdx() == other.getIdx() || assoc.getPlant2().getIdx() == other.getIdx()) {
+				return assoc;
+			}
+		}
+		Association assoc = Association.create(plant, other);
+		vecAssoc.add(assoc);
+		return assoc;
 	}
 	
 	private void save() {

@@ -1,5 +1,8 @@
 package view;
 
+import java.util.Vector;
+
+import model.Association;
 import model.Plant;
 
 import org.eclipse.swt.events.SelectionAdapter;
@@ -12,6 +15,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.List;
 
 import common.view.WidgetsFactory;
+import controller.Controller;
 
 /**
  * A widget displaying the associations of a plant.
@@ -66,7 +70,11 @@ public class ListAssociations extends Composite {
 		} else if (plant.getIdx() < 1) {
 			lstAssoc.add("Veuillez d'abord\nenregistrer la plante");
 		} else {
-			lstAssoc.add("Associations pour\n" + plant.getName());
+			//lstAssoc.add("Associations pour\n" + plant.getName());
+			Vector<Association> vecAssoc = Controller.getInstance().getAssociations(plant);
+			for (Association assoc : vecAssoc) {
+				lstAssoc.add(assoc.toString());
+			}
 		}
 		
 		enableWidgets();

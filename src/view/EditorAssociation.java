@@ -101,7 +101,7 @@ public class EditorAssociation extends AbstractEditor {
 			theObject.setKind(selKind.getValue());
 
 			try {
-				//Controller.getInstance().saveAssociation(theObject);
+				Controller.getInstance().saveAssociation(theObject);
 				enableWidgets(false);
 			} catch (Exception e) {
 				MessageBox.error(e);
