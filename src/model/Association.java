@@ -76,6 +76,17 @@ public class Association extends DataObject {
 	public void setPlant2(Plant plant2) {
 		this.plant2 = plant2;
 	}
+	
+	public Plant getOtherPlant(Plant plant) {
+		if (plant == null) {
+			return plant1;
+		}
+		if (plant1.getIdx() == plant.getIdx()) {
+			return plant2;
+		} else {
+			return plant1;
+		}
+	}
 
 	public AssociationKind getKind() {
 		return kind;

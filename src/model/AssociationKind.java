@@ -7,20 +7,23 @@ package model;
  * <p><b>Modifications:</b>
  * <ul>
  * <li>31.01.2018: nicz - Creation</li>
+ * <li>14.02.2018: nicz - Added color</li>
  * </ul>
  */
 public enum AssociationKind {
 
-	GOOD   ("Bon",      1.0),
-	NEUTRAL("Neutre",   0.0),
-	BAD    ("Mauvais", -1.0);
+	GOOD   ("Bon",      1.0, "#00ff00"),
+	NEUTRAL("Neutre",   0.0, "#888888"),
+	BAD    ("Mauvais", -1.0, "#ff0000");
 	
 	private String sGuiName;
 	private double value;
+	private String sColor;
 	
-	private AssociationKind(String sGuiName, double value) {
+	private AssociationKind(String sGuiName, double value, String sColor) {
 		this.sGuiName = sGuiName;
 		this.value    = value;
+		this.sColor   = sColor;
 	}
 	
 	/**
@@ -33,11 +36,19 @@ public enum AssociationKind {
 	
 	
 	/**
-	 * Gets this association's value.
+	 * Gets this association kind's value.
 	 * @return the value
 	 */
 	public double getValue() {
 		return value;
+	}
+
+	/**
+	 * Get the color hex code associated to this kind.
+	 * @return a hex color code, for example '#ff0000'.
+	 */
+	public String getColor() {
+		return sColor;
 	}
 
 	/**

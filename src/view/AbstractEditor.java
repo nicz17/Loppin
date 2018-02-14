@@ -39,7 +39,7 @@ public abstract class AbstractEditor extends Composite implements DataListener {
 	protected Button btnCancel;
 
 	/** the delete button */
-	private Button btnDelete;
+	protected Button btnDelete;
 	
 	/** the main composite, where the editing widgets should be placed */
 	protected Composite cMain;

@@ -3,18 +3,24 @@ package view;
 import java.util.Vector;
 
 import model.Association;
+import model.AssociationKind;
 import model.Plant;
 
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.Label;
 
+import common.view.IconManager;
 import common.view.WidgetsFactory;
+
 import controller.Controller;
 
 /**
@@ -23,6 +29,7 @@ import controller.Controller;
  * <p><b>Modifications:</b>
  * <ul>
  * <li>05.02.2018: nicz - Creation</li>
+ * <li>14.02.2018: nicz - Display associations with color icons and description</li>
  * </ul>
  */
 public class ListAssociations extends Composite {
@@ -30,8 +37,11 @@ public class ListAssociations extends Composite {
 	private Plant plant;
 	
 	private Group  grpAssoc;
-	private List   lstAssoc;
+	private Composite cItems;
 	private Button btnEdit;
+	
+	private final Color colorGood = new Color(getDisplay(), new RGB(0, 255, 0));
+	private final Color colorBad  = new Color(getDisplay(), new RGB(255, 0, 0));
 
 	/**
 	 * Constructor.
@@ -44,13 +54,16 @@ public class ListAssociations extends Composite {
 		this.plant = null;
 		
 		this.setLayout(new GridLayout());
-		this.setLayoutData(new GridData(GridData.FILL_BOTH));
+		GridData gd = new GridData(GridData.FILL_BOTH);
+		gd.widthHint = 200;
+		this.setLayoutData(gd);
 		
 		grpAssoc = WidgetsFactory.getInstance().createGroup(this, "Associations");
 		
-		lstAssoc = WidgetsFactory.getInstance().createList(grpAssoc, 240, 700);
+		cItems = WidgetsFactory.getInstance().createComposite(grpAssoc, 2, false, 2);
 		
-		btnEdit = WidgetsFactory.getInstance().createPushButton(grpAssoc, "Editer", "edit", "Editer", true, new SelectionAdapter() {
+		btnEdit = WidgetsFactory.getInstance().createPushButton(grpAssoc, "Editer", "edit", 
+				"Ajouter ou modifier les associations", true, new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				DialogAssociationEdition dlgEdit = new DialogAssociationEdition(getShell(), plant);
 				dlgEdit.open();
@@ -63,20 +76,34 @@ public class ListAssociations extends Composite {
 	
 	public void showObject(Plant p) {
 		this.plant = p;
-		lstAssoc.removeAll();
+		
+		for (Control control : cItems.getChildren()) {
+			control.dispose();
+		}
+		cItems.pack();
 		
 		if (plant == null) {
-			lstAssoc.add("Veuillez choisir\nune plante");
-		} else if (plant.getIdx() < 1) {
-			lstAssoc.add("Veuillez d'abord\nenregistrer la plante");
+			WidgetsFactory.getInstance().createLabel(cItems, "Veuillez choisir\nune plante");
+		} else if (plant.isUnsaved()) {
+			WidgetsFactory.getInstance().createLabel(cItems, "Veuillez d'abord\nenregistrer la plante");
 		} else {
-			//lstAssoc.add("Associations pour\n" + plant.getName());
 			Vector<Association> vecAssoc = Controller.getInstance().getAssociations(plant);
 			for (Association assoc : vecAssoc) {
-				lstAssoc.add(assoc.toString());
+				Label lblColor = WidgetsFactory.getInstance().createLabel(cItems, 16);
+				boolean isGood = (assoc.getKind() == AssociationKind.GOOD);
+				lblColor.setImage(IconManager.createColorIcon(16, isGood ? colorGood : colorBad));
+				Label lblName = WidgetsFactory.getInstance().createLabel(cItems, assoc.getOtherPlant(plant).getName());
+				if (assoc.getDescription() != null) {
+					lblColor.setToolTipText(assoc.getDescription());
+					lblName.setToolTipText(assoc.getDescription());
+				}
+			}
+			if (vecAssoc.isEmpty()) {
+				WidgetsFactory.getInstance().createLabel(cItems, "Aucune association");
 			}
 		}
 		
+		cItems.pack();
 		enableWidgets();
 	}
 	
