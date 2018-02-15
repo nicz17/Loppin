@@ -85,6 +85,9 @@ public class SelectorColor extends Composite {
 		}
 	}
 	
+	/**
+	 * Displays a dialog to choose the soil color.
+	 */
 	private void showColorDialog() {
 		ColorDialog dlg = new ColorDialog(getShell());
 
@@ -98,8 +101,10 @@ public class SelectorColor extends Composite {
 
         // Open the dialog and retrieve the selected color
         RGB rgb = dlg.open();
-        sRGB = rgb.toString();
-        updateDisplay();
+        if (rgb != null) {
+        	sRGB = rgb.toString();
+        	updateDisplay();
+        }
 	}
 	
 	private RGB parseRGBString(String strRGB) {
