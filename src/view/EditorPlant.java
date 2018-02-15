@@ -199,13 +199,13 @@ public class EditorPlant extends AbstractEditor {
 	@Override
 	protected boolean hasUnsavedData() {
 		if (theObject == null) return false;
-		if (!txtName.getText().equals(theObject.getName())) return true;
-		if (!txtDesc.getText().equals(theObject.getDescription())) return true;
-		if (!txtLatin.getText().equals(theObject.getNameLatin())) return true;
-		if (selSoil.getValue() != null && !selSoil.getValue().equals(theObject.getSoil())) return true;
+		if (!txtName.getText().equals(theObject.getValue(Field.PLANT_NAME))) return true;
+		if (!txtDesc.getText().equals(theObject.getValue(Field.PLANT_DESC))) return true;
+		if (!txtLatin.getText().equals(theObject.getValue(Field.PLANT_LATIN))) return true;
+		if (selSoil.getValue() != null && selSoil.getValue().getIdx() != theObject.getSoil().getIdx()) return true;
 		if (selFamily.getValue() != null && !selFamily.getValue().equals(theObject.getFamily())) return true;
 		if (selKind.getValue() != null && !selKind.getValue().equals(theObject.getKind())) return true;
-		if (selSowing.getValue()   != theObject.getDateSowing()) return true;
+		if (selSowing.getValue()   != theObject.getDateSowing())   return true;
 		if (selPlanting.getValue() != theObject.getDatePlanting()) return true;
 		if (selHarvest.getValue()  != theObject.getDateHarvest1()) return true;
 		if (selHarvest2.getValue() != theObject.getDateHarvest2()) return true;
