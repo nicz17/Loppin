@@ -6,6 +6,7 @@ package model;
  * <p><b>Modifications:</b>
  * <ul>
  * <li>31.01.2018: nicz - Creation</li>
+ * <li>15.02.2018: nicz - Added tooltip method</li>
  * </ul>
  */
 public class Association extends DataObject {
@@ -102,6 +103,30 @@ public class Association extends DataObject {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	/**
+	 * Gets the tooltip text for this association.
+	 * @return the tooltip text (never null)
+	 */
+	public String getTooltip() {
+		String tooltip = "";
+		switch (getKind()) {
+		case GOOD:
+			tooltip += "Bonne association";
+			break;
+		case BAD:
+			tooltip += "Mauvaise association";
+			break;
+		case NEUTRAL:
+			tooltip += "Association neutre";
+			break;
+		}
+		tooltip += "\n";
+		if (getDescription() != null) {
+			tooltip += getDescription();
+		}
+		return tooltip;
 	}
 
 	@Override

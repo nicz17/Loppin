@@ -92,11 +92,12 @@ public class ListAssociations extends Composite {
 				Label lblColor = WidgetsFactory.getInstance().createLabel(cItems, 16);
 				boolean isGood = (assoc.getKind() == AssociationKind.GOOD);
 				lblColor.setImage(IconManager.createColorIcon(16, isGood ? colorGood : colorBad));
+				
 				Label lblName = WidgetsFactory.getInstance().createLabel(cItems, assoc.getOtherPlant(plant).getName());
-				if (assoc.getDescription() != null) {
-					lblColor.setToolTipText(assoc.getDescription());
-					lblName.setToolTipText(assoc.getDescription());
-				}
+				
+				String sTooltip = assoc.getTooltip();
+				lblColor.setToolTipText(sTooltip);
+				lblName.setToolTipText(sTooltip);
 			}
 			if (vecAssoc.isEmpty()) {
 				WidgetsFactory.getInstance().createLabel(cItems, "Aucune association");
