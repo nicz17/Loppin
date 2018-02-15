@@ -39,6 +39,7 @@ public class ValidatorAssociation extends Validator<Association> {
 
 	@Override
 	public void validateDelete(Association obj) throws ValidationException {
+		checkDeleteUnsaved(obj);
 		checkDependencies(obj);
 	}
 	

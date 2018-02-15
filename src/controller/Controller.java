@@ -196,6 +196,19 @@ public class Controller {
 	}
 	
 	/**
+	 * Deletes the specified association from database.
+	 * @param association  the association to delete
+	 * @throws Exception  if delete is invalid or fails
+	 */
+	public void deleteAssociation(Association association) throws Exception {
+		log.info("Request to delete " + association);
+		validatorAssociation.validateDelete(association);
+		String where = "idxAssociation = " + association.getIdx();
+		DataAccess.getInstance().deleteAssociations(where);
+		notifyDataListeners(UpdateType.ASSOCIATION, -1);
+	}
+	
+	/**
 	 * Adds the specified listener to the list of listeners
 	 * that will be notified of updates in data.
 	 * @param listener  the listener to add (must no be null).

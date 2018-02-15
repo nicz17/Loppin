@@ -19,6 +19,7 @@ import model.DataObject;
  * <ul>
  * <li>15.01.2018: nicz - Creation</li>
  * <li>25.01.2018: nicz - Added method to check for dependencies</li>
+ * <li>15.02.2018: nicz - Improved deletion validation</li>
  * </ul>
  */
 public abstract class Validator<T extends DataObject> {
@@ -55,6 +56,19 @@ public abstract class Validator<T extends DataObject> {
 		
 		if (name.startsWith(" ") || name.endsWith(" ")) {
 			onError(obj.toString() + " :\nLe nom ne doit pas commencer ou finir par des espaces.");
+		}
+	}
+	
+	/**
+	 * Checks that the object to delete has been saved to database.
+	 * @param obj  the object to delete
+	 * @throws ValidationException  if object is unsaved
+	 */
+	protected void checkDeleteUnsaved(T obj) throws ValidationException {
+		if (obj.isUnsaved()) {
+			String sError = "Impossible d'effacer\n" + obj.getName() + "\n" +
+					"car il n'a pas été sauvegardé.";
+			onError(sError);
 		}
 	}
 	

@@ -121,7 +121,12 @@ public class EditorAssociation extends AbstractEditor {
 
 	@Override
 	protected void deleteObject() {
-		
+		try {
+			Controller.getInstance().deleteAssociation(theObject);
+			reset();
+		} catch (Exception e) {
+			MessageBox.error(e);
+		}
 	}
 
 }

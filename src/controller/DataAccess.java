@@ -385,7 +385,7 @@ public class DataAccess {
 	 */
 	protected void deleteAssociations(String where) throws AppException {
 		Connection conn = dbTools.getConnection();
-		log.info("Deleting associations");
+		log.info("Deleting associations where " + where);
 		
 		if (where == null || where.isEmpty()) {
 			log.error("Invalid where-clause to delete associations, skipping");

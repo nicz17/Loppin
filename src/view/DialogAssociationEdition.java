@@ -12,13 +12,12 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-import common.view.MessageBox;
 import common.view.WidgetsFactory;
+
 import controller.Controller;
 
 /**
@@ -41,7 +40,6 @@ public class DialogAssociationEdition {
 	private Shell parent;
 	private DataTable<Plant> tblPlants;
 	private EditorAssociation editor;
-	private Button btnSave;
 	
 	/**
 	 * Constructor.
@@ -82,13 +80,6 @@ public class DialogAssociationEdition {
 		editor = new EditorAssociation(cRight);
 				
 		Composite cButtons = widgetsFactory.createComposite(cRight, 2, true, 12);
-		
-		btnSave = widgetsFactory.createOkButton(cButtons, new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				save();
-				shell.dispose();
-			}
-		});
 		
 		widgetsFactory.createCloseButton(cButtons, new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -141,12 +132,8 @@ public class DialogAssociationEdition {
 		return assoc;
 	}
 	
-	private void save() {
-		MessageBox.info("Pas encore implémenté !");
-	}
-	
 	private void enableButtons() {
-		btnSave.setEnabled(false);
+		
 	}
 
 }
