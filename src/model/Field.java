@@ -18,6 +18,11 @@ public enum Field {
 	ASSOC_PLANT1  ("asPlant1", "Plante 1", 150, 64),
 	ASSOC_PLANT2  ("asPlant2", "Plante 2", 150, 64),
 	
+	GARDEN_NAME    ("gaName", "Nom", 150, 64),
+	GARDEN_DESC    ("gaDescription", "Description", 250, 512),
+	GARDEN_SIZE    ("gaSize", "Dimensions", 100, 100),
+	GARDEN_SIZETILE("gaSizeTile", "Taille tuiles", 100, 100),
+	
 	PLANT_NAME    ("plName", "Nom", 150, 64),
 	PLANT_LATIN   ("plNameLatin", "Nom latin", 150, 64),
 	PLANT_DESC    ("plDescription", "Description", 250, 512),
