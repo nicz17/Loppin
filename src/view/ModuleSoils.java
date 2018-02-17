@@ -1,16 +1,10 @@
 package view;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Vector;
 
 import model.Field;
 import model.Soil;
 
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.widgets.TableItem;
-
-import common.base.Logger;
 import common.view.IncrementalSearchBox;
 
 import controller.Controller;
@@ -25,7 +19,7 @@ import controller.Controller;
  * </ul>
  */
 public class ModuleSoils extends AbstractModule<Soil> {
-	private static final Logger log = new Logger("ModuleSoils", true);
+	//private static final Logger log = new Logger("ModuleSoils", true);
 	
 	private EditorSoil editor;
 
@@ -34,26 +28,18 @@ public class ModuleSoils extends AbstractModule<Soil> {
 		
 		loadWidgets();
 		loadData();
-		log.info("Done constructor");
 	}
 	
 	@Override
 	public void soilUpdated(int idx) {
-		setSelectedObject(idx);
+		dataTable.setSelectedObject(idx);
 		showObjects();
 	}
 	
 	@Override
 	protected void createObject() {
 		Soil newObj = new Soil(0, "", "", "RGB {105, 80, 16}");
-		vecObjects.add(newObj);
-		
-		// show object in table
-		setSelectedObject(0);
-		reloadTable();
-		
-		// show object in editor
-		showObject(newObj);
+		dataTable.addObject(newObj, true);
 	}
 
 	@Override
@@ -63,13 +49,13 @@ public class ModuleSoils extends AbstractModule<Soil> {
 
 	@Override
 	protected void showObjects() {
-		vecObjects = Controller.getInstance().getSoils(searchBox.getSearchText(), ordering);
-		reloadTable();
+		Vector<Soil> vecObjects = Controller.getInstance().getSoils(searchBox.getSearchText(), dataTable.getOrdering());
+		dataTable.showObjects(vecObjects);
 	}
 
 	@Override
 	protected void loadWidgets() {
-		initTable(new Field[] {Field.SOIL_NAME, Field.SOIL_DESC, Field.SOIL_COLOR});
+		dataTable.initTable(new Field[] {Field.SOIL_NAME, Field.SOIL_DESC, Field.SOIL_COLOR});
 		
 	    editor = new EditorSoil(cRight);
 	    
@@ -80,50 +66,43 @@ public class ModuleSoils extends AbstractModule<Soil> {
 	    };
 		
 		Controller.getInstance().addDataListener(this);
-
-		//orderByColumn(0);
-		log.info("Done loadWidgets");
 	}
 
 	@Override
 	protected void loadData() {
 		showObjects();
-		if (!vecObjects.isEmpty()) {
-			tblData.select(0);
-			showObject(vecObjects.firstElement());
-		}
-		log.info("Done loadData");
+		dataTable.selectFirstObject();
 	}
 	
 
-	@Override
-	protected void reloadTable() {
-		super.reloadTable();
-		
-		int iCol = 2;
-		for (int iRow = 0; iRow < vecObjects.size(); iRow++) {
-			TableItem ti = tblData.getItem(iRow);
-			Soil soil = vecObjects.get(iRow);
-			RGB rgb = parseRGBString(soil.getColor());
-			if (rgb != null) {
-				ti.setBackground(iCol, new Color(getDisplay(), rgb));
-			}
-		}
-	}
+//	@Override
+//	protected void reloadTable() {
+//		super.reloadTable();
+//		
+//		int iCol = 2;
+//		for (int iRow = 0; iRow < vecObjects.size(); iRow++) {
+//			TableItem ti = tblData.getItem(iRow);
+//			Soil soil = vecObjects.get(iRow);
+//			RGB rgb = parseRGBString(soil.getColor());
+//			if (rgb != null) {
+//				ti.setBackground(iCol, new Color(getDisplay(), rgb));
+//			}
+//		}
+//	}
 	
-	private void showObject(Soil obj) {
+	protected void showObject(Soil obj) {
 		editor.showObject(obj);
 	}
 	
-	private RGB parseRGBString(String strRGB) {
-		Matcher m = Pattern.compile("RGB \\{(\\d+), (\\d+), (\\d+)\\}").matcher(strRGB);
-		if (m.find()) {
-			int r = Integer.parseInt(m.group(1));
-			int g = Integer.parseInt(m.group(2));
-			int b = Integer.parseInt(m.group(3));
-			return new RGB(r, g, b);
-		}
-		return null;
-	}
+//	private RGB parseRGBString(String strRGB) {
+//		Matcher m = Pattern.compile("RGB \\{(\\d+), (\\d+), (\\d+)\\}").matcher(strRGB);
+//		if (m.find()) {
+//			int r = Integer.parseInt(m.group(1));
+//			int g = Integer.parseInt(m.group(2));
+//			int b = Integer.parseInt(m.group(3));
+//			return new RGB(r, g, b);
+//		}
+//		return null;
+//	}
 
 }

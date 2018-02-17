@@ -202,7 +202,8 @@ public class EditorPlant extends AbstractEditor {
 		if (!txtName.getText().equals(theObject.getValue(Field.PLANT_NAME))) return true;
 		if (!txtDesc.getText().equals(theObject.getValue(Field.PLANT_DESC))) return true;
 		if (!txtLatin.getText().equals(theObject.getValue(Field.PLANT_LATIN))) return true;
-		if (selSoil.getValue() != null && selSoil.getValue().getIdx() != theObject.getSoil().getIdx()) return true;
+		if (theObject.getSoil() != null && selSoil.getValue() != null 
+				&& selSoil.getValue().getIdx() != theObject.getSoil().getIdx()) return true;
 		if (selFamily.getValue() != null && !selFamily.getValue().equals(theObject.getFamily())) return true;
 		if (selKind.getValue() != null && !selKind.getValue().equals(theObject.getKind())) return true;
 		if (selSowing.getValue()   != theObject.getDateSowing())   return true;

@@ -1,5 +1,7 @@
 package view;
 
+import java.util.Vector;
+
 import model.Family;
 import model.Field;
 import model.Plant;
@@ -35,7 +37,7 @@ public class ModulePlants extends AbstractModule<Plant> {
 	
 	@Override
 	public void plantUpdated(int idx) {
-		setSelectedObject(idx);
+		dataTable.setSelectedObject(idx);
 		showObjects();
 	}
 	
@@ -47,14 +49,7 @@ public class ModulePlants extends AbstractModule<Plant> {
 	@Override
 	protected void createObject() {
 		Plant newObj = new Plant(0, "", "", PlantKind.getDefault(), Family.getDefault(), null);
-		vecObjects.add(newObj);
-		
-		// show object in table
-		setSelectedObject(0);
-		reloadTable();
-		
-		// show object in editor
-		showObject(newObj);
+		dataTable.addObject(newObj, true);
 	}
 
 	@Override
@@ -64,13 +59,13 @@ public class ModulePlants extends AbstractModule<Plant> {
 
 	@Override
 	protected void showObjects() {
-		vecObjects = Controller.getInstance().getPlants(searchBox.getSearchText(), ordering);
-		reloadTable();
+		Vector<Plant> vecObjects = Controller.getInstance().getPlants(searchBox.getSearchText(), dataTable.getOrdering());
+		dataTable.showObjects(vecObjects);
 	}
 
 	@Override
 	protected void loadWidgets() {
-		initTable(new Field[] {Field.PLANT_NAME,   Field.PLANT_LATIN, Field.PLANT_DESC, 
+		dataTable.initTable(new Field[] {Field.PLANT_NAME,   Field.PLANT_LATIN, Field.PLANT_DESC, 
 							   Field.PLANT_FAMILY, Field.PLANT_KIND,  Field.PLANT_SOIL});
 		
 	    editor = new EditorPlant(cRight);
@@ -91,13 +86,10 @@ public class ModulePlants extends AbstractModule<Plant> {
 	@Override
 	protected void loadData() {
 		showObjects();
-		if (!vecObjects.isEmpty()) {
-			tblData.select(0);
-			showObject(vecObjects.firstElement());
-		}
+		dataTable.selectFirstObject();
 	}
 	
-	private void showObject(Plant obj) {
+	protected void showObject(Plant obj) {
 		editor.showObject(obj);
 		lstAssoc.showObject(obj);
 	}

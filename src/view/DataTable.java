@@ -117,9 +117,58 @@ public abstract class DataTable<T extends DataObject> {
 	public abstract void onSelection(T obj);
 	
 	/**
+	 * Adds a new object to the table.
+	 * Reloads the table. 
+	 * Selects the new object if required.
+	 * @param newObj  the object to add
+	 * @param bSelectIt  true to select new object
+	 */
+	public void addObject(T newObj, boolean bSelectIt) {
+		vecObjects.add(newObj);
+		if (bSelectIt) {
+			selIdx = newObj.getIdx();
+		}
+		reloadTable();
+	}
+	
+	/**
 	 * Called when the table sorting has been modified.
 	 */
 	public abstract void onSorting();
+	
+	public T getSelectedObject() {
+		if (selIdx == null) {
+			return null;
+		}
+		for (T obj : vecObjects) {
+			if (obj.getIdx() == selIdx.intValue()) {
+				return obj;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Set the database index of the object to select.
+	 * Used after new object creation or update.
+	 * 
+	 * @param idx database index of the object to select
+	 */
+	public void setSelectedObject(int idx) {
+		//if (idx > 0) selIdx = idx;
+		selIdx = idx;
+		reselectObject();
+	}
+	
+	/**
+	 * Selects the first object displayed in the table.
+	 * If the table is empty, does nothing.
+	 */
+	public void selectFirstObject() {
+		if (vecObjects != null && !vecObjects.isEmpty()) {
+			setSelectedObject(vecObjects.firstElement().getIdx());
+		}
+	}
 	
 	/**
 	 * @return  the table ordering state, describing which column
