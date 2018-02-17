@@ -117,7 +117,7 @@ public class Controller {
 	 * @return  the database index
 	 * @throws ValidationException  if saving is invalid
 	 */
-	public int savePlant(Garden garden) throws Exception {
+	public int saveGarden(Garden garden) throws Exception {
 		log.info("Saving " + garden);
 		validatorGarden.validateSave(garden);
 		int idx = DataAccess.getInstance().saveGarden(garden);

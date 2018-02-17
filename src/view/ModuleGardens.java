@@ -1,11 +1,12 @@
 package view;
 
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
+import java.util.Vector;
 
-import common.view.MessageBox;
+import model.Field;
+import model.Garden;
+
+import common.view.IncrementalSearchBox;
+
 import controller.Controller;
 
 
@@ -14,10 +15,13 @@ import controller.Controller;
  *
  * <p><b>Modifications:</b>
  * <ul>
- * <li>21.01.2018: nicz - Creation</li>
+ * <li>21.01.2018: nicz - Creation as blank module</li>
+ * <li>17.02.2018: nicz - Implementation of table and editor</li>
  * </ul>
  */
-public class ModuleGardens extends TabbedModule {
+public class ModuleGardens extends AbstractModule<Garden> {
+
+	private EditorGarden editor;
 	
 	public ModuleGardens() {
 		super();
@@ -25,24 +29,54 @@ public class ModuleGardens extends TabbedModule {
 		loadWidgets();
 		loadData();
 	}
+	
+	@Override
+	public void gardenUpdated(int idx) {
+		dataTable.setSelectedObject(idx);
+		showObjects();
+	}
+	
+	@Override
+	protected void createObject() {
+		Garden newObj = new Garden(0, "", "", "", 10, 10, 50);
+		dataTable.addObject(newObj, true);
+	}
+
+	@Override
+	protected void onTableSelection(Garden obj) {
+		showObject(obj);
+	}
+
+	@Override
+	protected void showObjects() {
+		Vector<Garden> vecObjects = Controller.getInstance().getGardens(searchBox.getSearchText(), dataTable.getOrdering());
+		dataTable.showObjects(vecObjects);
+	}
+
+	@Override
+	protected void showObject(Garden obj) {
+		editor.showObject(obj);
+	}
 
 	@Override
 	protected void loadWidgets() {
-		this.setLayout(new GridLayout());
-		this.setLayoutData(new GridData());
+		dataTable.initTable(new Field[] {Field.GARDEN_NAME, Field.GARDEN_DESC, Field.GARDEN_SIZE, Field.GARDEN_SIZETILE});
 		
-		widgetsFactory.createLabel(this, "Ce module n'est pas encore implémenté !");
-		widgetsFactory.createPushButton(this, "A propos de Loppin", "idea", null, false, new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				MessageBox.info("A propos", Controller.getInstance().getCredits());
-			}
-		});
+	    editor = new EditorGarden(cRight);
+	    
+	    searchBox = new IncrementalSearchBox(cButtons) {
+	    	public void onSearch() {
+	    		showObjects();
+	    	}
+	    };
+		
+		Controller.getInstance().addDataListener(this);
 	}
 
 	@Override
 	protected void loadData() {
-
+		showObjects();
+		dataTable.selectFirstObject();
 	}
 
 }
