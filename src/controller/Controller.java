@@ -7,6 +7,7 @@ import view.Loppin;
 import model.Association;
 import model.DataObject;
 import model.Field;
+import model.Garden;
 import model.Ordering;
 import model.Plant;
 import model.Soil;
@@ -15,6 +16,7 @@ import common.base.Logger;
 import common.exceptions.ValidationException;
 import controller.DatabaseTools.UpdateType;
 import controller.validation.ValidatorAssociation;
+import controller.validation.ValidatorGarden;
 import controller.validation.ValidatorPlant;
 import controller.validation.ValidatorSoil;
 
@@ -34,6 +36,7 @@ public class Controller {
 	private static Controller singleton;
 	
 	private final Vector<DataListener> vecDataListeners;
+	private final ValidatorGarden      validatorGarden;
 	private final ValidatorPlant       validatorPlant;
 	private final ValidatorAssociation validatorAssociation;
 	private final ValidatorSoil        validatorSoil;
@@ -65,6 +68,21 @@ public class Controller {
 	}
 	
 	/**
+	 * Gets the list of Garden objects saved in database.
+	 * @param filter  a text filter (may be null)
+	 * @param ordering  optional sorting object. May be null.
+	 * @return the list of Garden objects
+	 */
+	public Vector<Garden> getGardens(String filter, Ordering ordering) {
+		String where = null;
+		if (filter != null && !filter.isEmpty()) {
+			where = Field.GARDEN_NAME.getDbName() + " like '%" + filter + "%' ";
+		}
+		Vector<Garden> vecGardens = DataAccess.getInstance().fetchGardens(where, ordering);
+		return vecGardens;
+	}
+	
+	/**
 	 * Gets the list of associations defined for the specified plant
 	 * @param plant  the plant for which to get associations
 	 * @return a (possibly empty) list of associations
@@ -92,6 +110,22 @@ public class Controller {
 		return vecSoils;
 	}
 
+	/**
+	 * Saves the specified garden to database.
+	 * 
+	 * @param garden  the garden to save
+	 * @return  the database index
+	 * @throws ValidationException  if saving is invalid
+	 */
+	public int savePlant(Garden garden) throws Exception {
+		log.info("Saving " + garden);
+		validatorGarden.validateSave(garden);
+		int idx = DataAccess.getInstance().saveGarden(garden);
+		//CacheGarden.getInstance().refresh(idx);
+		notifyDataListeners(UpdateType.GARDEN, idx);
+		return idx;
+	}
+	
 	/**
 	 * Saves the specified plant to database.
 	 * 
@@ -180,6 +214,19 @@ public class Controller {
 		DataAccess.getInstance().deletePlant(plant);
 		CachePlant.getInstance().loadAll();
 		notifyDataListeners(UpdateType.PLANT, -1);
+	}
+	
+	/**
+	 * Deletes the specified Garden from database.
+	 * @param garden  the garden to delete
+	 * @throws Exception  if delete is invalid or fails
+	 */
+	public void deleteGarden(Garden garden) throws Exception {
+		log.info("Request to delete " + garden);
+		validatorGarden.validateDelete(garden);
+		DataAccess.getInstance().deleteGarden(garden);
+		//CacheGarden.getInstance().loadAll();
+		notifyDataListeners(UpdateType.GARDEN, -1);
 	}
 	
 	/**
@@ -312,7 +359,10 @@ public class Controller {
 	 */
 	private Controller() {
 		Logger.setGlobalDebug(true);
+		
 		vecDataListeners     = new Vector<DataListener>();
+		
+		validatorGarden      = new ValidatorGarden();
 		validatorSoil        = new ValidatorSoil();
 		validatorPlant       = new ValidatorPlant();
 		validatorAssociation = new ValidatorAssociation();

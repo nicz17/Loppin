@@ -5,6 +5,7 @@ import java.sql.SQLException;
 
 import model.Association;
 import model.AssociationKind;
+import model.Garden;
 import model.Plant;
 import model.PlantKind;
 import model.Family;
@@ -17,6 +18,7 @@ import model.Soil;
  * <ul>
  * <li>14.01.2018: nicz - Creation</li>
  * <li>01.02.2018: nicz - Added Association</li>
+ * <li>17.02.2018: nicz - Added Garden</li>
  * </ul>
  */
 public class DataObjectFactory {
@@ -32,6 +34,24 @@ public class DataObjectFactory {
 		if (instance == null)
 			instance = new DataObjectFactory();
 		return instance;
+	}
+	
+	/**
+	 * Creates a Garden object from the specified ResultSet.
+	 * @param rs  a ResultSet containing Garden info.
+	 * @return  the created garden.
+	 * @throws SQLException
+	 */
+	public Garden createGarden(ResultSet rs) throws SQLException {
+		Garden obj = new Garden(
+				rs.getInt("idxGarden"), 
+				rs.getString("gaName"), 
+				rs.getString("gaDescription"), 
+				rs.getString("gaPhoto"),
+				rs.getInt("gaSizeX"),
+				rs.getInt("gaSizeY"),
+				rs.getInt("gaSizeTile"));
+		return obj;
 	}
 	
 	/**

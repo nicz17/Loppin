@@ -8,6 +8,7 @@ import java.util.Vector;
 
 import model.Association;
 import model.Field;
+import model.Garden;
 import model.Ordering;
 import model.Plant;
 import model.Soil;
@@ -46,6 +47,42 @@ public class DataAccess {
 	 */
 	public void terminate() {
 		dbTools.closeConnection();
+	}
+	
+	/**
+	 * Fetches Garden objects from database.
+	 * @param where  optional SQL where clause (without where keyword). May be null.
+	 * @param ordering  optional sorting object. May be null.
+	 * @return  the fetched Garden objects.
+	 */
+	protected Vector<Garden> fetchGardens(String where, Ordering ordering) {
+		Vector<Garden> vecResult = new Vector<>();
+		
+		String query = "SELECT * FROM Garden ";
+		if (where != null && !where.isEmpty()) {
+			query += "WHERE " + where;
+		}
+		if (ordering == null) {
+			ordering = new Ordering(Field.GARDEN_NAME, true);
+		}
+		query += ordering.getOrderClause();
+		
+		try {
+			Connection conn = dbTools.getConnection();
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			rs.beforeFirst();
+			while (rs.next()) {
+				Garden obj = objectFactory.createGarden(rs);
+				vecResult.add(obj);
+			}
+			log.debug("Returning " + vecResult.size() + " gardens");
+			stmt.close();
+		} catch (SQLException e) {
+			log.error("Fetching gardens failed: " + e.getMessage());
+		}
+
+		return vecResult;
 	}
 	
 	/**
@@ -222,6 +259,62 @@ public class DataAccess {
 	}
 
 	/**
+	 * Saves the specified {@link Garden} to database.
+	 * 
+	 * @param obj  the garden to save
+	 * @return the database index of saved object
+	 * @throws AppException if saving failed
+	 */
+	protected int saveGarden(Garden obj) throws AppException {
+		Connection conn = dbTools.getConnection();
+		log.info("Saving " + obj);
+
+		int idx = -1;
+		
+		try {
+			Statement stmt = conn.createStatement();
+			
+			if (obj.getIdx() > 0) {
+				// update existing
+				String query = String.format("UPDATE Garden SET gaName = %s, " +
+						"gaDescription = %s, gaPhoto = %s, " +
+						"gaSizeX = %d, gaSizeY = %d, gaSizeTile = %d " +
+						"WHERE idxGarden = %d", 
+						DatabaseTools.toSQLstring(obj.getName()), 
+						DatabaseTools.toSQLstring(obj.getDescription()),
+						DatabaseTools.toSQLstring(obj.getPhoto()),
+						obj.getSizeX(), obj.getSizeY(), obj.getSizeTile(),
+						obj.getIdx() );
+				log.debug("SQL: " + query);
+				stmt.execute(query);
+				idx = obj.getIdx();
+			} else {
+				// create new
+				String query = String.format("INSERT INTO Garden " +
+						"(idxGarden, gaName, gaDescription, gaPhoto, gaSizeX, gaSizeY, gaSizeTile) " +
+						"VALUES (null, %s, %s, %s, %d, %d, %d)", 
+						DatabaseTools.toSQLstring(obj.getName()), 
+						DatabaseTools.toSQLstring(obj.getDescription()),
+						DatabaseTools.toSQLstring(obj.getPhoto()),
+						obj.getSizeX(), obj.getSizeY(), obj.getSizeTile());
+				log.debug("SQL: " + query);
+				stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
+				
+				// Get inserted index
+				ResultSet rs = stmt.getGeneratedKeys();
+				if (rs.next())
+					idx = rs.getInt(1);
+				rs.close();
+			}
+			stmt.close();
+		} catch (SQLException e) {
+			log.error("Saving Garden failed: " + e.getMessage());
+			throw new AppException("Echec de sauvegarde de " + obj + "\n" + e.getMessage());
+		}
+		return idx;
+	}
+
+	/**
 	 * Saves the specified {@link Soil} to database.
 	 * 
 	 * @param obj  the soil to save
@@ -349,6 +442,31 @@ public class DataAccess {
 		} catch (SQLException e) {
 			log.error("Deleting Plant failed: " + e.getMessage());
 			throw new AppException("Echec de suppression de la plante " + obj + "\n" + e.getMessage());
+		}
+	}
+	
+	/**
+	 * Deletes the specified garden from database.
+	 * 
+	 * @param obj the garden to delete
+	 * @throws AppException if failed to delete object
+	 */
+	protected void deleteGarden(Garden obj) throws AppException {
+		Connection conn = dbTools.getConnection();
+		log.info("Deleting " + obj);
+		try {
+			Statement stmt = conn.createStatement();
+			if (obj.getIdx() > 0) {
+				String query = String.format("DELETE FROM Garden WHERE idxGarden = %d", obj.getIdx());
+				log.debug("SQL: " + query);
+				stmt.execute(query);
+			} else {
+				log.error("Garden to delete has invalid idx: " + obj);
+			}
+			stmt.close();
+		} catch (SQLException e) {
+			log.error("Deleting Garden failed: " + e.getMessage());
+			throw new AppException("Echec de suppression du jardin " + obj + "\n" + e.getMessage());
 		}
 	}
 	
