@@ -17,6 +17,7 @@ public enum Module implements IsModule {
 	GARDENS(ModuleGardens.class.getName(),  "Jardins",   "fence"),
 	PLANTS (ModulePlants.class.getName(),   "Plantes",   "leaf"),
     SOILS  (ModuleSoils.class.getName(),    "Sols",      "rocks"),
+    AGENDA (ModuleAgenda.class.getName(),   "Agenda",    "calendar3"),
     JOURNAL(ModuleJournal.class.getName(),  "Journal",   "edit");
 
 	private String moduleClass;
