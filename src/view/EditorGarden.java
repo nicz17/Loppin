@@ -22,6 +22,7 @@ public class EditorGarden extends AbstractEditor {
 	
 	private Text txtName;
 	private Text txtDesc;
+	private SelectorSizes selSizes;
 	
 	private Garden theObject;
 
@@ -38,6 +39,9 @@ public class EditorGarden extends AbstractEditor {
 		widgetsFactory.createLabel(cMain, Field.GARDEN_DESC.getGuiName(), true);
 		txtDesc = widgetsFactory.createMultilineText(cMain, 
 				Field.GARDEN_DESC.getMax(), 125, modifListener);
+		
+		addLabel(Field.GARDEN_SIZE);
+		selSizes = new SelectorSizes(cMain, 2, 50, "tuiles", modifListener);
 
 		Controller.getInstance().addDataListener(this);
 	}
@@ -53,6 +57,7 @@ public class EditorGarden extends AbstractEditor {
 		if (object != null) {
 			txtName.setText(object.getName());
 			txtDesc.setText(object.getDescription() == null ? "" : object.getDescription());
+			selSizes.setValues(object.getSizeX(), object.getSizeY());
 		} else {
 			txtName.setText("");
 			txtDesc.setText("");
@@ -78,6 +83,8 @@ public class EditorGarden extends AbstractEditor {
 		if (theObject != null) {
 			theObject.setName(txtName.getText());
 			theObject.setDescription(txtDesc.getText());
+			theObject.setSizeX(selSizes.getSizeX());
+			theObject.setSizeY(selSizes.getSizeY());
 
 			try {
 				Controller.getInstance().saveGarden(theObject);
@@ -95,6 +102,8 @@ public class EditorGarden extends AbstractEditor {
 		if (theObject == null) return false;
 		if (!txtName.getText().equals(theObject.getName())) return true;
 		if (!txtDesc.getText().equals(theObject.getDescription())) return true;
+		if (selSizes.getSizeX() != theObject.getSizeX()) return true;
+		if (selSizes.getSizeY() != theObject.getSizeY()) return true;
 		return false;
 	}
 
