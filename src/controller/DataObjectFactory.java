@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import model.Association;
 import model.AssociationKind;
 import model.Garden;
+import model.Journal;
 import model.Plant;
 import model.PlantKind;
 import model.Family;
@@ -19,6 +20,7 @@ import model.Soil;
  * <li>14.01.2018: nicz - Creation</li>
  * <li>01.02.2018: nicz - Added Association</li>
  * <li>17.02.2018: nicz - Added Garden</li>
+ * <li>22.02.2018: nicz - Added Journal</li>
  * </ul>
  */
 public class DataObjectFactory {
@@ -105,6 +107,22 @@ public class DataObjectFactory {
 				rs.getString("soName"), 
 				rs.getString("soDescription"), 
 				rs.getString("soColor"));
+		return obj;
+	}
+	
+	/**
+	 * Creates a Journal object from the specified ResultSet.
+	 * @param rs  a ResultSet containing Journal info.
+	 * @return  the created soil.
+	 * @throws SQLException
+	 */
+	public Journal createJournal(ResultSet rs) throws SQLException {
+		Journal obj = new Journal(
+				rs.getInt("idxJournal"), 
+				rs.getString("joTitle"), 
+				rs.getString("joText"), 
+				rs.getTimestamp("joDate"),
+				null);
 		return obj;
 	}
 	
