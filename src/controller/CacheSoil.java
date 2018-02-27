@@ -1,8 +1,5 @@
 package controller;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Vector;
 
 import model.Soil;
@@ -17,13 +14,10 @@ import common.base.Logger;
  * <li>20.01.2018: nicz - Creation</li>
  * </ul>
  */
-public class CacheSoil {
+public class CacheSoil extends AbstractCache<Soil> {
 	
 	private static final Logger log = new Logger("CacheSoil", true);
 	
-	/** Map of Soils by database index. */
-	private final Map<Integer, Soil> mapById;
-
 	/** the singleton instance */
 	private static CacheSoil _instance = null;
 	
@@ -34,36 +28,22 @@ public class CacheSoil {
 	 * @return  the soil, or null if not found.
 	 */
 	public Soil getSoil(int idx) {
-		if (idx > 0) {
-			return mapById.get(new Integer(idx));
-		} else {
-			return null;
-		}
+		return getObject(idx);
 	}
 	
-	/** 
-	 * Reloads the cache.
-	 * Fetches all soils from database and fills the cache. 
-	 */
+	@Override
 	public void loadAll() {
 		clear();
 		Vector<Soil> soils = DataAccess.getInstance().fetchSoils(null, null);
 		log.info("Loaded " + soils.size() + " soils");
 		
 		for (Soil soil : soils) {
-			addSoil(soil);
+			addObject(soil);
 		}
 	}
 	
-	public Collection<Soil> getAll() {
-		return mapById.values();
-	}
 	
-	
-	/**
-	 * Refresh the cache for the specified soil.
-	 * @param idxSoil  the index of the soil to refresh.
-	 */
+	@Override
 	public void refresh(int idxSoil) {
 		if (idxSoil > 0) {
 			String where = "idxSoil = " + idxSoil;
@@ -71,36 +51,8 @@ public class CacheSoil {
 			if (soils != null && !soils.isEmpty()) {
 				Soil soil = soils.firstElement();
 				log.info("Refreshing cache for " + soil);
-				addSoil(soil);
+				addObject(soil);
 			}
-		}
-	}
-
-	/**
-	 * Gets the size of the cache.
-	 * Size is the number of Soils with different IDs.
-	 * 
-	 * @return  cache size
-	 */
-	public int size() {
-		return mapById.size();
-	}
-
-	/** 
-	 * Clears the cache.
-	 */
-	public void clear() {
-		mapById.clear();
-	}
-	
-	/**
-	 * Adds the specified Soil to cache.
-	 * 
-	 * @param soil  the Soil to add
-	 */
-	private void addSoil(Soil soil) {
-		if (soil != null) {
-			mapById.put(new Integer(soil.getIdx()), soil);
 		}
 	}
 
@@ -114,7 +66,7 @@ public class CacheSoil {
 
 	/** Private singleton constructor */
 	private CacheSoil() {
-		mapById = new HashMap<>();
+		super();
 	}
 
 }
