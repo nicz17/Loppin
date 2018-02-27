@@ -329,6 +329,7 @@ public class Controller {
 		// NB: cache reloading order is important !
 		CacheSoil.getInstance().loadAll();
 		CachePlant.getInstance().loadAll();
+		CacheGarden.getInstance().loadAll();
 	}
 	
 	/**
