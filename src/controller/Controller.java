@@ -8,6 +8,7 @@ import model.Association;
 import model.DataObject;
 import model.Field;
 import model.Garden;
+import model.Journal;
 import model.Ordering;
 import model.Plant;
 import model.Soil;
@@ -17,6 +18,7 @@ import common.exceptions.ValidationException;
 import controller.DatabaseTools.UpdateType;
 import controller.validation.ValidatorAssociation;
 import controller.validation.ValidatorGarden;
+import controller.validation.ValidatorJournal;
 import controller.validation.ValidatorPlant;
 import controller.validation.ValidatorSoil;
 
@@ -40,6 +42,7 @@ public class Controller {
 	private final ValidatorPlant       validatorPlant;
 	private final ValidatorAssociation validatorAssociation;
 	private final ValidatorSoil        validatorSoil;
+	private final ValidatorJournal     validatorJournal;
 
 	/**
 	 * Gets the singleton instance.
@@ -285,6 +288,8 @@ public class Controller {
 			vecDeps.addAll(DataAccess.getInstance().fetchPlants(where, null));
 		} else if (obj instanceof Association) {
 			// No dependencies for Association, since they can always be deleted.
+		} else if (obj instanceof Journal) {
+			// Journal entries can always be deleted.
 		} else {
 			log.error("Unhandled DataObject " + obj);
 		}
@@ -367,6 +372,7 @@ public class Controller {
 		validatorSoil        = new ValidatorSoil();
 		validatorPlant       = new ValidatorPlant();
 		validatorAssociation = new ValidatorAssociation();
+		validatorJournal     = new ValidatorJournal();
 		
 		reloadCaches();
 	}

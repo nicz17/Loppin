@@ -50,7 +50,7 @@ public abstract class Validator<T extends DataObject> {
 	 * @throws ValidationException  if name is invalid
 	 */
 	protected void validateName(String name, T obj) throws ValidationException {
-		if (name == null || name.isEmpty()) {
+		if (name == null || name.trim().isEmpty()) {
 			onError(obj.toString() + " :\nLe nom ne doit pas être vide.");
 		}
 		

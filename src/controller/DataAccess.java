@@ -9,6 +9,7 @@ import java.util.Vector;
 import model.Association;
 import model.Field;
 import model.Garden;
+import model.Journal;
 import model.Ordering;
 import model.Plant;
 import model.Soil;
@@ -519,6 +520,31 @@ public class DataAccess {
 		} catch (SQLException e) {
 			log.error("Deleting Associations failed: " + e.getMessage());
 			throw new AppException("Echec de suppression d'associations\n" + e.getMessage());
+		}
+	}
+	
+	/**
+	 * Deletes the specified journal from database.
+	 * 
+	 * @param obj the journal to delete
+	 * @throws AppException if failed to delete object
+	 */
+	protected void deleteJournal(Journal obj) throws AppException {
+		Connection conn = dbTools.getConnection();
+		log.info("Deleting " + obj);
+		try {
+			Statement stmt = conn.createStatement();
+			if (obj.getIdx() > 0) {
+				String query = String.format("DELETE FROM Journal WHERE idxJournal = %d", obj.getIdx());
+				log.debug("SQL: " + query);
+				stmt.execute(query);
+			} else {
+				log.error("Journal to delete has invalid idx: " + obj);
+			}
+			stmt.close();
+		} catch (SQLException e) {
+			log.error("Deleting Journal failed: " + e.getMessage());
+			throw new AppException("Echec de suppression du journal " + obj + "\n" + e.getMessage());
 		}
 	}
 	

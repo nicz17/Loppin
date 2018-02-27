@@ -122,7 +122,7 @@ public class DataObjectFactory {
 				rs.getString("joTitle"), 
 				rs.getString("joText"), 
 				rs.getTimestamp("joDate"),
-				null);
+				CacheGarden.getInstance().getGarden(rs.getInt("joGarden")));
 		return obj;
 	}
 	
