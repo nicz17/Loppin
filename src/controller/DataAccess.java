@@ -188,6 +188,42 @@ public class DataAccess {
 
 		return vecResult;
 	}
+	
+	/**
+	 * Fetches Journal entries from database.
+	 * @param where  optional SQL where clause (without where keyword). May be null.
+	 * @param ordering  optional sorting object. May be null.
+	 * @return  the fetched Journal entries.
+	 */
+	protected Vector<Journal> fetchJournals(String where, Ordering ordering) {
+		Vector<Journal> vecResult = new Vector<>();
+		
+		String query = "SELECT * FROM Journal ";
+		if (where != null && !where.isEmpty()) {
+			query += "WHERE " + where;
+		}
+		if (ordering == null) {
+			ordering = new Ordering(Field.JOURNAL_DATE, false);
+		}
+		query += ordering.getOrderClause();
+
+		try {
+			Connection conn = dbTools.getConnection();
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			rs.beforeFirst();
+			while (rs.next()) {
+				Journal obj = objectFactory.createJournal(rs);
+				vecResult.add(obj);
+			}
+			log.debug("Returning " + vecResult.size() + " journal entries");
+			stmt.close();
+		} catch (SQLException e) {
+			log.error("Fetching journal failed: " + e.getMessage());
+		}
+
+		return vecResult;
+	}
 
 	/**
 	 * Saves the specified {@link Plant} to database.
@@ -420,7 +456,62 @@ public class DataAccess {
 		}
 		return idx;
 	}
-	
+
+
+	/**
+	 * Saves the specified {@link Journal} to database.
+	 * 
+	 * @param obj  the journal to save
+	 * @return the database index of saved object
+	 * @throws AppException if saving failed
+	 */
+	protected int saveJournal(Journal obj) throws AppException {
+		Connection conn = dbTools.getConnection();
+		log.info("Saving " + obj);
+
+		int idx = -1;
+		
+		try {
+			Statement stmt = conn.createStatement();
+			
+			if (obj.getIdx() > 0) {
+				// update existing
+				String query = String.format("UPDATE Journal SET joTitle = %s, " +
+						"joText = %s, joDate = %s " +
+						"WHERE idxJournal = %d", 
+						DatabaseTools.toSQLstring(obj.getTitle()), 
+						DatabaseTools.toSQLstring(obj.getText()),
+						DatabaseTools.toSqlDateTime(obj.getDate()),
+						obj.getIdx() );
+				log.debug("SQL: " + query);
+				stmt.execute(query);
+				idx = obj.getIdx();
+			} else {
+				// create new
+				String query = String.format("INSERT INTO Journal " +
+						"(idxJournal, joTitle, joText, joDate, joGarden) " +
+						"VALUES (null, %s, %s, %s, %s)", 
+						DatabaseTools.toSQLstring(obj.getTitle()), 
+						DatabaseTools.toSQLstring(obj.getText()),
+						DatabaseTools.toSqlDateTime(obj.getDate()),
+						obj.getGarden() == null ? "null" : String.valueOf(obj.getGarden().getIdx()));
+				log.debug("SQL: " + query);
+				stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
+				
+				// Get inserted index
+				ResultSet rs = stmt.getGeneratedKeys();
+				if (rs.next())
+					idx = rs.getInt(1);
+				rs.close();
+			}
+			stmt.close();
+		} catch (SQLException e) {
+			log.error("Saving Journal failed: " + e.getMessage());
+			throw new AppException("Echec de sauvegarde de " + obj + "\n" + e.getMessage());
+		}
+		return idx;
+	}
+
 	/**
 	 * Deletes the specified plant from database.
 	 * 

@@ -112,6 +112,21 @@ public class Controller {
 		Vector<Soil> vecSoils = DataAccess.getInstance().fetchSoils(where, ordering);
 		return vecSoils;
 	}
+	
+	/**
+	 * Gets the list of Journal objects saved in database.
+	 * @param filter  a text filter (may be null)
+	 * @param ordering  optional sorting object. May be null.
+	 * @return the list of Journal objects
+	 */
+	public Vector<Journal> getJournals(String filter, Ordering ordering) {
+		String where = null;
+		if (filter != null && !filter.isEmpty()) {
+			where = Field.JOURNAL_TITLE.getDbName() + " like '%" + filter + "%' ";
+		}
+		Vector<Journal> vecJournals = DataAccess.getInstance().fetchJournals(where, ordering);
+		return vecJournals;
+	}
 
 	/**
 	 * Saves the specified garden to database.
@@ -199,6 +214,21 @@ public class Controller {
 		notifyDataListeners(UpdateType.SOIL, idx);
 		return idx;
 	}
+
+	/**
+	 * Saves the specified journal to database.
+	 * 
+	 * @param journal  the journal to save
+	 * @return  the database index
+	 * @throws ValidationException  if saving is invalid
+	 */
+	public int saveJournal(Journal journal) throws Exception {
+		log.info("Saving " + journal);
+		validatorJournal.validateSave(journal);
+		int idx = DataAccess.getInstance().saveJournal(journal);
+		notifyDataListeners(UpdateType.JOURNAL, idx);
+		return idx;
+	}
 	
 	/**
 	 * Deletes the specified Plant from database.
@@ -256,6 +286,18 @@ public class Controller {
 		String where = "idxAssociation = " + association.getIdx();
 		DataAccess.getInstance().deleteAssociations(where);
 		notifyDataListeners(UpdateType.ASSOCIATION, -1);
+	}
+	
+	/**
+	 * Deletes the specified Journal entry from database.
+	 * @param journal  the journal to delete
+	 * @throws Exception  if delete is invalid or fails
+	 */
+	public void deleteJournal(Journal journal) throws Exception {
+		log.info("Request to delete " + journal);
+		validatorJournal.validateDelete(journal);
+		DataAccess.getInstance().deleteJournal(journal);
+		notifyDataListeners(UpdateType.JOURNAL, -1);
 	}
 	
 	/**

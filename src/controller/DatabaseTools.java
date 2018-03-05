@@ -103,7 +103,8 @@ public class DatabaseTools {
 		ASSOCIATION,
 		GARDEN,
 		PLANT, 
-		SOIL
+		SOIL,
+		JOURNAL
 	}
 
 	/**
