@@ -24,7 +24,7 @@ public class ModuleGardens extends AbstractModule<Garden> {
 	private EditorGarden editor;
 	
 	public ModuleGardens() {
-		super();
+		super(2);
 	
 		loadWidgets();
 		loadData();

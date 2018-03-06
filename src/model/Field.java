@@ -23,7 +23,7 @@ public enum Field {
 	GARDEN_SIZE    ("gaSize", "Dimensions", 100, 100),
 	GARDEN_SIZETILE("gaSizeTile", "Taille tuiles", 100, 100),
 	
-	JOURNAL_TITLE  ("joTitle", "Titre", 150, 64),
+	JOURNAL_TITLE  ("joTitle", "Titre", 300, 64),
 	JOURNAL_TEXT   ("joText", "Texte", 250, 512),
 	JOURNAL_DATE   ("joDate", "Date", 150, 64),
 	JOURNAL_GARDEN ("joGarden", "Jardin", 150, 64),
