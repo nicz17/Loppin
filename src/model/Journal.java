@@ -92,7 +92,7 @@ public class Journal extends DataObject implements Comparable<Journal> {
 			value = getText() == null ? "" : getText();
 			break;
 		case JOURNAL_DATE:
-			value = Loppin.dateFormat.format(getDate());
+			value = Loppin.dateTimeFormat.format(getDate());
 			break;
 		case JOURNAL_GARDEN:
 			value = (getGarden() == null ? "-" : getGarden().getName());

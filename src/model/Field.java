@@ -25,7 +25,7 @@ public enum Field {
 	
 	JOURNAL_TITLE  ("joTitle", "Titre", 300, 64),
 	JOURNAL_TEXT   ("joText", "Texte", 250, 512),
-	JOURNAL_DATE   ("joDate", "Date", 150, 64),
+	JOURNAL_DATE   ("joDate", "Date", 180, 64),
 	JOURNAL_GARDEN ("joGarden", "Jardin", 150, 64),
 	
 	PLANT_NAME    ("plName", "Nom", 150, 64),

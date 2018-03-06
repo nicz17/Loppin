@@ -24,6 +24,7 @@ public class EditorJournal extends AbstractEditor {
 	private Text txtTitle;
 	private Text txtText;
 	private Label lblDate;
+	private Label lblGarden;
 	
 	private Journal theObject;
 
@@ -36,6 +37,9 @@ public class EditorJournal extends AbstractEditor {
 		
 		addLabel(Field.JOURNAL_DATE);
 		lblDate = widgetsFactory.createLabel(cMain);
+		
+		addLabel(Field.JOURNAL_GARDEN);
+		lblGarden = widgetsFactory.createLabel(cMain);
 		
 		addLabel(Field.JOURNAL_TITLE);
 		txtTitle = widgetsFactory.createText(cMain, Field.JOURNAL_TITLE.getMax(), modifListener);
@@ -56,11 +60,13 @@ public class EditorJournal extends AbstractEditor {
 		theObject = object;
 		
 		if (object != null) {
-			lblDate.setText(Loppin.dateFormat.format(object.getDate()));
-			txtTitle.setText(object.getTitle());
-			txtText.setText(object.getText() == null ? "" : object.getText());
+			lblDate.setText(object.getValue(Field.JOURNAL_DATE));
+			lblGarden.setText(object.getValue(Field.JOURNAL_GARDEN));
+			txtTitle.setText(object.getValue(Field.JOURNAL_TITLE));
+			txtText.setText(object.getValue(Field.JOURNAL_TEXT));
 		} else {
 			lblDate.setText("");
+			lblGarden.setText("");
 			txtTitle.setText("");
 			txtText.setText("");
 		}

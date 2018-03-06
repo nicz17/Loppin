@@ -45,7 +45,8 @@ public class Loppin extends AbstractMain {
 	 */
 	private static final String appVersion = "1.0.0 Dev";
 
-	public static final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.LONG, Locale.FRANCE);
+	public static final DateFormat dateFormat     = DateFormat.getDateInstance(DateFormat.LONG, Locale.FRANCE);
+	public static final DateFormat dateTimeFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.DEFAULT, Locale.FRANCE);
 
 	/** the singleton instance */
 	private static Loppin instance;
