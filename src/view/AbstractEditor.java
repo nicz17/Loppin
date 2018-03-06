@@ -158,4 +158,7 @@ public abstract class AbstractEditor extends Composite implements DataListener {
 
 	@Override
 	public void associationUpdated(int idx) {};
+
+	@Override
+	public void journalUpdated(int idx) {};
 }

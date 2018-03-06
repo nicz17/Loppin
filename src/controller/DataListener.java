@@ -9,6 +9,7 @@ import model.Soil;
  * <ul>
  * <li>14.01.2018: nicz - Creation</li>
  * <li>13.02.2018: nicz - Added Association update</li>
+ * <li>06.03.2018: nicz - Added Journal update</li>
  * </ul>
  */
 public interface DataListener {
@@ -36,4 +37,10 @@ public interface DataListener {
 	 * @param idx  the association database index
 	 */
 	public void associationUpdated(int idx);
+	
+	/**
+	 * A Journal entry was updated.
+	 * @param idx  the journal database index
+	 */
+	public void journalUpdated(int idx);
 }

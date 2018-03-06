@@ -28,7 +28,6 @@ import controller.Controller;
  */
 public class ModuleJournal extends AbstractModule<Journal> {
 	
-	
 	private EditorJournal editor;
 	
 	public ModuleJournal() {
@@ -36,6 +35,12 @@ public class ModuleJournal extends AbstractModule<Journal> {
 	
 		loadWidgets();
 		loadData();
+	}
+	
+	@Override
+	public void journalUpdated(int idx) {
+		dataTable.setSelectedObject(idx);
+		showObjects();
 	}
 
 	@Override

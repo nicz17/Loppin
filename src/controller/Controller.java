@@ -364,6 +364,9 @@ public class Controller {
 			case ASSOCIATION:
 				li.associationUpdated(idx);
 				break;
+			case JOURNAL:
+				li.journalUpdated(idx);
+				break;
 			default:
 			}
 		}
